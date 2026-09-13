@@ -1,0 +1,23 @@
+{
+  "problem_id": "",
+  "task_type": "",
+  "target": "",
+  "features": [],
+  "decision_variables": [],
+  "constraints": [],
+  "approved_models": [],
+  "primary_candidate": "",
+  "baseline_models": [],
+  "validation_model": "",
+  "split_strategy": {
+    "type": "",
+    "group_key": "",
+    "reason": ""
+  },
+  "metrics": [],
+  "preprocessing": [],
+  "random_seed": null,
+  "validation_plan": [],
+  "interpretability_plan": [],
+  "robustness_plan": []
+}
