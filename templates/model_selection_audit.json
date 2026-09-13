@@ -1,0 +1,29 @@
+{
+  "problem_id": "",
+  "task_type": "",
+  "data_regime": "",
+  "baselines": [],
+  "candidates": [
+    {
+      "name": "",
+      "role": "primary_candidate",
+      "fit_reason": "",
+      "assumptions": [],
+      "strengths": [],
+      "weaknesses": [],
+      "interpretability": "",
+      "computational_cost": "",
+      "validation_method": "",
+      "status": "proposed"
+    }
+  ],
+  "rejected_models": [
+    {
+      "name": "",
+      "reason": ""
+    }
+  ],
+  "recommended_experiment_ladder": [],
+  "major_risks": [],
+  "evidence_required_for_selection": []
+}
