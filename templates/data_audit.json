@@ -1,0 +1,26 @@
+{
+  "task_data_regime": "",
+  "rows": null,
+  "features": null,
+  "target": "",
+  "units": {},
+  "missingness": {},
+  "duplicates": null,
+  "outliers_or_range_issues": [],
+  "group_structure": {
+    "exists": false,
+    "group_key": "",
+    "notes": ""
+  },
+  "time_structure": {
+    "exists": false,
+    "time_key": "",
+    "notes": ""
+  },
+  "leakage_risks": [],
+  "recommended_split": {
+    "type": "",
+    "reason": ""
+  },
+  "major_quality_issues": []
+}
