@@ -1,0 +1,16 @@
+{
+  "problem_id": "",
+  "task_type": "",
+  "baselines": [
+    {
+      "name": "",
+      "role": "simple_baseline",
+      "rationale": "",
+      "inputs_required": [],
+      "method_summary": "",
+      "metrics": [],
+      "expected_outputs": [],
+      "limitations": []
+    }
+  ]
+}
