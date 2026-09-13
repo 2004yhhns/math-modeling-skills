@@ -1,0 +1,17 @@
+{
+  "experiments": [
+    {
+      "id": "EXP001",
+      "problem_id": "",
+      "model": "",
+      "status": "planned",
+      "features": [],
+      "split": "",
+      "parameters": {},
+      "metrics": {},
+      "result_files": [],
+      "warnings": [],
+      "conclusion": ""
+    }
+  ]
+}
