@@ -1,0 +1,14 @@
+{
+  "problem_id": "",
+  "selected_model": "",
+  "baseline_comparison": [],
+  "split_verified": false,
+  "leakage_checks": [],
+  "residual_or_error_checks": [],
+  "group_or_regime_checks": [],
+  "robustness_checks": [],
+  "interpretation_limits": [],
+  "overall_status": "NOT_VALIDATED",
+  "blocking_issues": [],
+  "next_action": ""
+}
