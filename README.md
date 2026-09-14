@@ -9,9 +9,10 @@ This repository is **not** a place to store real competition projects. It stores
 1. Keep the human modeler in charge of final modeling decisions.
 2. Separate workflow rules from mathematical knowledge.
 3. Require baselines before complex models.
-4. Record assumptions, model-selection rationale, feasibility evidence, and experiments.
+4. Record assumptions, data-preparation decisions, model-selection rationale, feasibility evidence, and experiments.
 5. Make validation, leakage checks, robustness, and interpretability first-class steps.
 6. Keep claims traceable to evidence.
+7. Preserve raw evidence and make data cleaning problem-driven rather than recipe-driven.
 
 ## Repository structure
 
@@ -21,17 +22,15 @@ math-modeling-skills/
 ├── skills/
 │   ├── problem-analysis/
 │   ├── data-audit/
+│   ├── data-preparation/
 │   ├── model-selection/
 │   ├── feasibility-test/
 │   ├── model-building/
 │   └── model-validation/
 ├── knowledge/
-│   ├── prediction/
-│   ├── classification/
-│   ├── optimization/
-│   └── evaluation/
 ├── templates/
 ├── algorithms/
+├── docs/
 └── examples/
 ```
 
@@ -42,6 +41,7 @@ math-modeling-skills/
 - `knowledge/`: shared mathematical-modeling knowledge — what methods mean, when they fit, and how they fail.
 - `templates/`: clean reusable output templates. Do not store live competition state here.
 - `algorithms/`: reusable implementation guidance or code.
+- `docs/`: cross-stage contracts and architecture documentation.
 - `examples/`: optional demonstrations of how the skills behave on example problems.
 
 ## Invocation contract
@@ -55,26 +55,20 @@ Do **not** require the user to manually enumerate every file under `references/`
 Canonical feasibility invocation:
 
 ```text
-Use `math-modeling-skills/skills/feasibility-test/SKILL.md`
-to run a feasibility test for Q1.
-Stop at the Human Gate and present the Feasibility Card before implementation.
-```
-
-A concise Chinese equivalent is:
-
-```text
 使用 `math-modeling-skills/skills/feasibility-test/SKILL.md`
 对 Q1 做 feasibility test，到 Human Gate 暂停并给我 Feasibility Card。
 ```
 
-The longer form below is optional and mainly useful for debugging or when repository visibility/path resolution is uncertain:
+Canonical data-preparation invocation:
 
 ```text
-Use the existing upstream project artifacts and let the selected skill
-load its references, knowledge, and algorithms as needed.
+使用 `math-modeling-skills/skills/data-preparation/SKILL.md`
+根据已有 data audit 对 Q1 所需数据进行准备和清洗。
+严格按题意解释缺失、异常、重复、时间/空间对齐问题；
+高影响处理先到 Human Gate，不要自动填补或删除。
 ```
 
-If the short invocation fails because Codex cannot locate the repository, skill file, or upstream project artifacts, fix the workspace/path visibility rather than compensating by copying all skill instructions into the prompt.
+If a short invocation fails because Codex cannot locate the repository, skill file, or upstream project artifacts, fix workspace/path visibility rather than copying all skill instructions into the prompt.
 
 ## Recommended usage
 
@@ -88,6 +82,8 @@ workspace/
     ├── problem/
     ├── project/
     ├── data/
+    │   ├── raw/
+    │   └── processed/
     ├── src/
     ├── experiments/
     ├── results/
@@ -104,6 +100,8 @@ problem-analysis
   ↓
 data-audit
   ↓
+data-preparation
+  ↓
 model-selection
   ↓
 feasibility-test
@@ -115,131 +113,99 @@ model-validation
 
 The skills repository provides the reusable method; the live project stores the actual state and outputs.
 
-## First-version workflow
+## Core workflow
 
 ### 1. Problem analysis
 
-Use `problem-analysis` to convert the statement into:
+Convert the statement into subproblems, inputs/outputs, constraints, dependencies, evaluation targets, information timing, assumptions, and ambiguities.
 
-- subproblems,
-- inputs and outputs,
-- constraints,
-- mathematical task types,
-- dependencies,
-- assumptions and ambiguities.
-
-Expected project outputs:
+Expected outputs:
 
 - `project/problem_brief.md`
 - `project/assumption_ledger.md`
 
 ### 2. Data audit
 
-Use `data-audit` before model selection.
+Diagnose what the raw data can and cannot support. Check schema, semantics, units, missingness, outliers, grouping, time/spatial structure, leakage, information timing, and problem-to-data mapping.
 
-Check:
-
-- schema,
-- missing data,
-- outliers,
-- units,
-- group/time/spatial structure,
-- possible leakage,
-- train/test split constraints.
-
-Expected project output:
+Expected output:
 
 - `project/data_audit.json`
 
-### 3. Model selection
+### 3. Data preparation
 
-Use `model-selection` only after the current subproblem and data regime are clear.
+Execute only defensible model-independent preparation after the audit.
 
-It must produce:
+Core rules:
 
-- a simple baseline,
-- a stronger standard baseline where useful,
-- 2–4 candidate models,
-- rejected models with reasons,
-- a recommended experiment ladder,
-- a validation plan.
+- raw data are immutable,
+- missingness must be interpreted before action,
+- missing is not automatically zero or error,
+- no blanket mean/median/mode filling,
+- no automatic outlier deletion,
+- no silent smoothing/resampling,
+- no future-information reconstruction,
+- high-impact transformations require explicit justification and human review when available,
+- train/test-dependent preprocessing is deferred to the later modeling pipeline,
+- every transformation is logged and checked before/after.
 
-Expected project outputs:
+Expected outputs:
+
+- prepared data under `data/processed/` or equivalent,
+- `project/data_preparation.json`.
+
+### 4. Model selection
+
+Use the audited/prepared data regime to create a model ladder with meaningful baselines, 2–4 candidates, rejected alternatives, interface/data requirements, feasibility risks, experiment order, and validation plan.
+
+Expected outputs:
 
 - `project/baseline_solution.json`
 - `project/model_selection_audit.json`
 - `project/model_spec.json`
 
-### 4. Feasibility test
+### 5. Feasibility test
 
-Use `feasibility-test` before committing to full model building, especially when choosing among contest problems or when the selected model has substantial implementation/numerical risk.
+Before full implementation, derive the dependency graph, final target, critical failure point, CFQ, required data, MVM readiness/interface check, and proposed minimum viable model. Stop at the Human Gate before substantial implementation. After approval, run universal and family-specific checks and return `GO`, `GO_WITH_RISKS`, `HOLD`, or `NO_GO`.
 
-It should:
-
-- build the task dependency graph and identify the final evaluation target,
-- identify critical paths and critical failure points,
-- derive the Core Feasibility Question (CFQ),
-- select primary and secondary model families from the CFQ rather than keywords,
-- derive required data from the CFQ,
-- run an MVM-specific data readiness and model-interface check using the upstream data audit,
-- propose the smallest decisive prototype without simplifying away the defining difficulty,
-- stop at the Human Gate and present a Feasibility Card before substantial implementation,
-- after approval, run the central mechanism end to end,
-- check constraints, units, runtime, stability, leakage/information timing, and basic sensitivity,
-- load only the relevant family-specific checks for optimization, prediction, geometry/search, PDE/mechanism, routing, or stochastic simulation,
-- run a counterfactual review,
-- classify blockers and return `GO`, `GO_WITH_RISKS`, `HOLD`, or `NO_GO`.
-
-Expected project output:
+Expected output:
 
 - `project/feasibility_test.json`
 
-### 5. Model building
+### 6. Model building
 
-Use `model-building` to implement only the approved experiment ladder after feasibility is established.
+Implement the approved experiment ladder after feasibility is established. Keep model-dependent preprocessing inside the correct training/evaluation pipeline so it cannot leak held-out or future information.
 
-Expected project outputs:
+Expected outputs:
 
 - code under `src/`,
 - artifacts under `results/`,
 - experiment entries in `project/experiment_log.json`.
 
-### 6. Model validation
+### 7. Model validation
 
-Use `model-validation` to test whether the apparent improvement is real.
+Test whether apparent improvement is real. At minimum check baseline improvement, split/leakage correctness, residual/error structure, generalization, robustness, and sensitivity to important data-preparation assumptions when material.
 
-At minimum check:
+## Workflow contract
 
-- baseline improvement,
-- correct split strategy,
-- leakage,
-- residual structure,
-- generalization,
-- robustness of the main conclusion.
+See `docs/workflow-handoff-contract.md` for the producer/consumer contract between stages and the return path when a downstream stage discovers an upstream defect.
 
 ## Design references
 
-This repository is an original synthesis inspired by three public projects:
+This repository is an original synthesis inspired by public mathematical-modeling workflow projects. It adapts useful design ideas into a smaller Codex-oriented competition workflow and does not copy those repositories verbatim.
 
-1. **Hjdd14/math-modeling**  
-   Main lessons used here: workflow governance, problem brief, assumptions, baselines, model-selection audit, model specification, validation artifacts, and phase-gate thinking.
+## Version 0.3 scope
 
-2. **dreamnight16 / sixtdreanight MCM-Resource**  
-   Main lesson used here: organize shared modeling knowledge by problem family (prediction, classification, optimization, evaluation, statistics, simulation/mechanism) rather than by a flat list of algorithms.
+The workflow now contains 7 core skills:
 
-3. **chengziyue1222/math-model-agent**  
-   Main lessons used here: split a large modeling agent into practical skills such as model selection and solving; distinguish primary model, baseline, validation model, and rejected models; keep algorithm implementations separate from skill instructions.
+```text
+problem-analysis
+→ data-audit
+→ data-preparation
+→ model-selection
+→ feasibility-test
+→ model-building
+→ model-validation
+```
 
-This repository does **not** copy those repositories verbatim. It adapts the useful design ideas into a smaller Codex-oriented competition workflow.
-
-## Version 0.2 scope
-
-The workflow now contains 6 core skills, including a rapid feasibility gate between model selection and full implementation. Useful future additions include:
-
-- sensitivity-analysis,
-- robustness-analysis,
-- interpretability,
-- judge-review,
-- paper-handoff,
-- experiment-ranking scripts,
-- JSON schemas and automated validation.
+Useful future additions include sensitivity-analysis, robustness-analysis, interpretability, judge-review, paper-handoff, experiment-ranking scripts, JSON schemas, and automated validation.
