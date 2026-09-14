@@ -3,6 +3,19 @@
   "rows": null,
   "features": null,
   "target": "",
+  "variable_catalog": [
+    {
+      "name": "",
+      "meaning": "",
+      "role": "input | target | state | parameter | constraint | identifier | other",
+      "unit": "",
+      "source": "",
+      "observed_or_derived": "observed | forecast | estimated | derived | future_realized | unknown",
+      "availability_time": "",
+      "resolution": "",
+      "notes": ""
+    }
+  ],
   "units": {},
   "missingness": {},
   "duplicates": null,
@@ -15,12 +28,42 @@
   "time_structure": {
     "exists": false,
     "time_key": "",
+    "sampling_frequency": "",
+    "timezone_or_clock_convention": "",
+    "forecast_issue_time": "",
+    "forecast_horizon": "",
+    "decision_interval": "",
+    "availability_notes": "",
     "notes": ""
   },
+  "spatial_structure": {
+    "exists": false,
+    "coordinate_system": "",
+    "spatial_resolution": "",
+    "notes": ""
+  },
+  "information_timing": {
+    "decision_times": [],
+    "available_at_decision_time": [],
+    "future_or_unavailable_fields": [],
+    "lookahead_risks": []
+  },
+  "problem_data_mapping": [
+    {
+      "problem_quantity": "",
+      "data_field_or_derivation": "",
+      "mapping_status": "clear | derived | ambiguous | missing",
+      "notes": ""
+    }
+  ],
   "leakage_risks": [],
   "recommended_split": {
     "type": "",
+    "group_key": "",
+    "time_key": "",
     "reason": ""
   },
+  "cleaning_or_preparation_decisions": [],
+  "unresolved_interface_issues": [],
   "major_quality_issues": []
 }
