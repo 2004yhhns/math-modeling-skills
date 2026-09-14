@@ -9,7 +9,7 @@ This repository is **not** a place to store real competition projects. It stores
 1. Keep the human modeler in charge of final modeling decisions.
 2. Separate workflow rules from mathematical knowledge.
 3. Require baselines before complex models.
-4. Record assumptions, model-selection rationale, and experiments.
+4. Record assumptions, model-selection rationale, feasibility evidence, and experiments.
 5. Make validation, leakage checks, robustness, and interpretability first-class steps.
 6. Keep claims traceable to evidence.
 
@@ -22,6 +22,7 @@ math-modeling-skills/
 │   ├── problem-analysis/
 │   ├── data-audit/
 │   ├── model-selection/
+│   ├── feasibility-test/
 │   ├── model-building/
 │   └── model-validation/
 ├── knowledge/
@@ -72,6 +73,8 @@ problem-analysis
 data-audit
   ↓
 model-selection
+  ↓
+feasibility-test
   ↓
 model-building
   ↓
@@ -135,9 +138,25 @@ Expected project outputs:
 - `project/model_selection_audit.json`
 - `project/model_spec.json`
 
-### 4. Model building
+### 4. Feasibility test
 
-Use `model-building` to implement only the approved experiment ladder.
+Use `feasibility-test` before committing to full model building, especially when choosing among contest problems or when the selected model has substantial implementation/numerical risk.
+
+It should:
+
+- define the smallest decisive prototype,
+- run the central mechanism end to end,
+- check constraints, units, runtime, stability, leakage/information timing, and basic sensitivity,
+- load only the relevant family-specific checks for optimization, prediction, geometry/search, PDE/mechanism, routing, or stochastic simulation,
+- classify blockers and return `GO`, `GO_WITH_RISKS`, `HOLD`, or `NO_GO`.
+
+Expected project output:
+
+- `project/feasibility_test.json`
+
+### 5. Model building
+
+Use `model-building` to implement only the approved experiment ladder after feasibility is established.
 
 Expected project outputs:
 
@@ -145,7 +164,7 @@ Expected project outputs:
 - artifacts under `results/`,
 - experiment entries in `project/experiment_log.json`.
 
-### 5. Model validation
+### 6. Model validation
 
 Use `model-validation` to test whether the apparent improvement is real.
 
@@ -173,17 +192,9 @@ This repository is an original synthesis inspired by three public projects:
 
 This repository does **not** copy those repositories verbatim. It adapts the useful design ideas into a smaller Codex-oriented competition workflow.
 
-## Version 0.1 scope
+## Version 0.2 scope
 
-The first version intentionally stays small:
-
-- 5 core skills,
-- 4 knowledge families,
-- reusable project templates,
-- a place for algorithm implementations,
-- no live competition projects inside this repository.
-
-After running one complete real problem, the next useful additions are likely:
+The workflow now contains 6 core skills, including a rapid feasibility gate between model selection and full implementation. Useful future additions include:
 
 - sensitivity-analysis,
 - robustness-analysis,
