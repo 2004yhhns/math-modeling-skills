@@ -19,6 +19,8 @@ The human owns the final modeling decisions. Your role is to help structure the 
 9. Preserve the problem statement, units, constraints, and evaluation target.
 10. A failed validation step must send the workflow back to the relevant earlier decision.
 11. Before committing substantial competition time to a risky model or final topic choice, use a minimum viable feasibility test when practical.
+12. A feasibility prototype must be driven by a Core Feasibility Question (CFQ), not merely by whichever model is easiest to run.
+13. Do not hide data, unit, timing, information-set, or model-interface defects inside prototype preprocessing. Return blocking defects to the appropriate upstream stage.
 
 ## Live-project boundary
 
@@ -56,6 +58,25 @@ Problem understanding
 → claims supported by evidence
 
 The feasibility step is a phase gate, not a full experiment campaign. It should test the smallest executable instance that preserves the central difficulty. If the result is `HOLD` or `NO_GO`, do not silently proceed to full model building.
+
+## Feasibility human gate
+
+Before substantial feasibility implementation, the assistant should first derive and present:
+
+1. final evaluation target,
+2. task dependency chain,
+3. critical path and critical failure point,
+4. Core Feasibility Question (CFQ),
+5. primary and secondary model families,
+6. data required specifically by the CFQ,
+7. unresolved data/interface issues, including time/spatial resolution, units, information availability, and model-input mapping,
+8. proposed minimum viable model,
+9. success criteria,
+10. what MVM success would prove and would not prove.
+
+When interactive human approval is available, pause at this gate before substantial prototype implementation. The human approves or revises the CFQ, family focus, required-data interpretation, and MVM scope. Routine coding, ordinary debugging, and diagnostic generation may proceed autonomously after approval.
+
+A feasibility test must not obtain a false `GO` by using information unavailable at decision time, silently changing units/resolution, or simplifying away the defining difficulty.
 
 ## Required decision discipline
 
