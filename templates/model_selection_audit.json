@@ -9,10 +9,24 @@
       "role": "primary_candidate",
       "fit_reason": "",
       "assumptions": [],
+      "data_requirements": [],
+      "preprocessing_requirements": [],
+      "expected_inputs": [],
+      "expected_outputs": [],
+      "upstream_dependencies": [],
+      "downstream_consumers": [],
+      "interface_risks": [],
+      "information_timing_risks": [],
+      "resolution_requirements": {
+        "temporal": "",
+        "spatial": "",
+        "notes": ""
+      },
       "strengths": [],
       "weaknesses": [],
       "interpretability": "",
       "computational_cost": "",
+      "implementation_or_numerical_risks": [],
       "validation_method": "",
       "status": "proposed"
     }
@@ -25,5 +39,15 @@
   ],
   "recommended_experiment_ladder": [],
   "major_risks": [],
+  "candidate_feasibility_targets": [
+    {
+      "candidate": "",
+      "mechanism_or_interface": "",
+      "why_failure_matters": "",
+      "evidence_needed": [],
+      "required_data": [],
+      "constraints_to_preserve": []
+    }
+  ],
   "evidence_required_for_selection": []
 }
