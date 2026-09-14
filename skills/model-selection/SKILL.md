@@ -9,6 +9,43 @@ description: Select defensible models for a mathematical modeling subproblem. Us
 
 Build a defensible model ladder rather than naming one sophisticated model, and preserve enough information for `feasibility-test` to identify the real execution bottleneck without reconstructing model assumptions from scratch.
 
+## Repository resource loading
+
+Treat the directory containing `skills/`, `knowledge/`, `templates/`, and `algorithms/` as the **skills repository root**.
+
+The user only needs to invoke this Skill, for example:
+
+`Use model-selection for Q4.`
+
+Do not require the user to separately list `references/`, `knowledge/`, `algorithms/`, or `templates/`.
+
+Load resources in this order:
+
+1. Read this `SKILL.md`.
+2. Read local rules under:
+   - `skills/model-selection/references/`
+   - always read `selection-rules.md`
+   - read other local routing/catalog references when present
+3. Read current live-project state:
+   - `project/problem_brief.md`
+   - `project/data_audit.json`
+   - `project/data_preparation.json`, if present
+   - `project/assumption_ledger.md`
+4. Classify the current subproblem into a problem family.
+5. Inspect shared `knowledge/` selectively:
+   - first use an index/catalog if one exists;
+   - then read only the relevant family, such as `knowledge/prediction/`, `knowledge/classification/`, `knowledge/optimization/`, or `knowledge/evaluation/`;
+   - read concrete model cards only for serious candidates.
+6. Use shared knowledge to compare **general model requirements** against **current data facts** from `data_audit.json`.
+7. Inspect `algorithms/` only to check whether reusable implementations or utilities already exist for serious candidates. Model selection must not prefer a model merely because an implementation happens to exist.
+8. When creating outputs, initialize from:
+   - `templates/baseline_solution.json`
+   - `templates/model_selection_audit.json`
+   - `templates/model_spec.json`
+9. Populate the copies in the live project's `project/` directory. Never write competition-specific state into repository `templates/`, `knowledge/`, or `algorithms/`.
+
+If a relevant shared knowledge card does not exist, continue using sound mathematical/modeling knowledge and explicitly note the knowledge-base gap. Do not stop the workflow merely because the repository is incomplete.
+
 ## Read
 
 1. `project/problem_brief.md`
@@ -119,6 +156,8 @@ Create or update:
 - `project/baseline_solution.json`
 - `project/model_selection_audit.json`
 - `project/model_spec.json`
+
+`model_spec.json` is the approved experiment contract. It may contain multiple approved models so that model-building can compare them under the same inputs, split strategy, metrics, and validation plan. A primary candidate is not yet the final model.
 
 The outputs should preserve enough information for downstream feasibility testing to recover:
 
