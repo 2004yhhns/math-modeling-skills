@@ -1,0 +1,74 @@
+{
+  "scope": {
+    "subproblems": [],
+    "raw_inputs": [],
+    "prepared_outputs": [],
+    "critical_variables": []
+  },
+  "status": "READY | READY_WITH_WARNINGS | HOLD",
+  "issues": [
+    {
+      "id": "",
+      "variable_or_record": "",
+      "issue_type": "",
+      "semantic_interpretation": "",
+      "evidence": [],
+      "proposed_action": "",
+      "alternatives_considered": [],
+      "reason": "",
+      "affected_rows_or_values": null,
+      "information_timing_risk": "",
+      "downstream_impact": "",
+      "reversible": true,
+      "human_review_required": false,
+      "human_approval_status": "NOT_REQUIRED | PENDING | APPROVED | REJECTED"
+    }
+  ],
+  "missingness_decisions": [
+    {
+      "variable": "",
+      "missingness_type": "structural | expected_absence | measurement_failure | censored | future_unavailable | unknown | other",
+      "meaning": "",
+      "action": "preserve | preserve_with_flag | deterministic_reconstruct | impute | exclude | defer | unresolved",
+      "method_or_rule": "",
+      "why_defensible": "",
+      "sensitivity_check_needed": false,
+      "notes": ""
+    }
+  ],
+  "transformations_applied": [
+    {
+      "transformation_id": "",
+      "source_field_or_records": "",
+      "issue_type": "",
+      "operation": "",
+      "parameters": {},
+      "reason": "",
+      "rows_or_values_affected": null,
+      "before_summary": {},
+      "after_summary": {},
+      "reversible": true,
+      "information_timing_check": "",
+      "human_approval": "NOT_REQUIRED | APPROVED",
+      "remaining_risk": ""
+    }
+  ],
+  "transformations_rejected_or_deferred": [],
+  "before_after_validation": {
+    "row_count": {},
+    "entity_count": {},
+    "time_coverage": {},
+    "spatial_coverage": {},
+    "missingness": {},
+    "duplicates": {},
+    "ranges_units": {},
+    "distribution_extremes": {},
+    "totals_or_conservation_checks": {},
+    "information_timing": {},
+    "required_fields_usable": {}
+  },
+  "unresolved_issues": [],
+  "downstream_usage_restrictions": [],
+  "preparation_code": [],
+  "notes": ""
+}
