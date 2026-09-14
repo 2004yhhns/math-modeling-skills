@@ -21,6 +21,11 @@ The human owns the final modeling decisions. Your role is to help structure the 
 11. Before committing substantial competition time to a risky model or final topic choice, use a minimum viable feasibility test when practical.
 12. A feasibility prototype must be driven by a Core Feasibility Question (CFQ), not merely by whichever model is easiest to run.
 13. Do not hide data, unit, timing, information-set, or model-interface defects inside prototype preprocessing. Return blocking defects to the appropriate upstream stage.
+14. Preserve raw data. Do not overwrite original competition data with cleaned or transformed versions.
+15. Data cleaning must be problem-driven rather than recipe-driven. Missing, zero, extreme, duplicate-looking, irregular, or discontinuous values must be interpreted before they are modified.
+16. Do not automatically impute missing values, delete outliers, smooth signals, resample time series, merge ambiguous records, or replace missing values with zero. Use such operations only when the problem semantics and data-generating process justify them.
+17. High-impact data preparation decisions that may change model conclusions require explicit recording and, when interactive approval is available, human review before execution.
+18. Separate model-independent data preparation from model-dependent preprocessing. Training-derived transformations must respect the split/information set and must not be fit globally.
 
 ## Live-project boundary
 
@@ -33,6 +38,8 @@ Expected live project structure:
 ├── problem/
 ├── project/
 ├── data/
+│   ├── raw/
+│   └── processed/
 ├── src/
 ├── experiments/
 ├── results/
@@ -46,6 +53,7 @@ Read and write the live project's artifacts. Do not store live project state ins
 
 Problem understanding
 → data audit
+→ data preparation
 → problem/task classification
 → baseline design
 → candidate model selection
@@ -58,6 +66,21 @@ Problem understanding
 → claims supported by evidence
 
 The feasibility step is a phase gate, not a full experiment campaign. It should test the smallest executable instance that preserves the central difficulty. If the result is `HOLD` or `NO_GO`, do not silently proceed to full model building.
+
+## Data-preparation decision discipline
+
+Before materially changing audited data, establish:
+
+- what the suspicious/missing value means,
+- whether the value is supposed to exist,
+- whether it would have been available at the relevant decision time,
+- whether missingness/extremeness is itself informative,
+- what downstream quantity/model uses it,
+- what information the transformation may remove or introduce,
+- whether the transformation is deterministic/reversible,
+- whether sensitivity to the choice must be checked.
+
+A technically complete table is not automatically a more truthful dataset.
 
 ## Feasibility human gate
 
@@ -101,6 +124,7 @@ When available, prefer reading these before major decisions:
 - `project/problem_brief.md`
 - `project/assumption_ledger.md`
 - `project/data_audit.json`
+- `project/data_preparation.json`
 - `project/baseline_solution.json`
 - `project/model_selection_audit.json`
 - `project/model_spec.json`
