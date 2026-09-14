@@ -1,6 +1,75 @@
 # Feasibility Test Rules
 
-This file separates universal feasibility checks from model-family-specific checks. Run the universal layer for every candidate; load only the special section relevant to the current problem.
+This file separates universal feasibility checks from model-family-specific checks. Run the universal layer for every candidate; load only the special sections relevant to the current CFQ.
+
+## 0. Pre-MVM CFQ and data/interface readiness rules
+
+These checks happen before prototype implementation. They do not replace the upstream `data-audit`; they verify that the subset of data required by the current Core Feasibility Question (CFQ) can legally and semantically enter the proposed MVM.
+
+### 0.1 CFQ quality
+
+A valid CFQ must identify:
+
+- the final evaluation target,
+- the critical mechanism or dependency being tested,
+- why that mechanism may fail,
+- the information and operating conditions under which it must work,
+- evidence that would justify continuing,
+- evidence that would block or redirect the route.
+
+Reject a CFQ that merely asks whether code or a named algorithm can run.
+
+### 0.2 Critical-failure-point screening
+
+When several failure points are possible, prioritize qualitatively by:
+
+- impact on the final target,
+- current uncertainty,
+- downstream dependency,
+- difficulty of detecting a false success.
+
+Interfaces between models are valid failure points and should be tested when downstream success depends on them.
+
+### 0.3 Required-data derivation
+
+Derive required data from the CFQ rather than from convenient available columns. For each required item identify source, meaning, unit, resolution, availability time, observed/forecast/estimated/derived status, and mathematical-model destination.
+
+### 0.4 Data readiness
+
+Check only CFQ-relevant data for:
+
+- availability,
+- temporal or spatial alignment,
+- units and semantics,
+- blocking missing/invalid values,
+- information availability at decision time,
+- explicit data-to-model mapping.
+
+A mismatch is not automatically fatal. It must be made explicit and resolved by a defensible transformation, model reformulation, different MVM, or return to `data-audit`.
+
+### 0.5 Temporal-interface checklist
+
+For time-dependent problems distinguish:
+
+- observation timestamp,
+- sampling interval,
+- forecast issue time,
+- forecast horizon,
+- model time step,
+- decision/update interval,
+- evaluation/settlement interval.
+
+Do not treat these as interchangeable. A one-hour forecast and a fifteen-minute decision model require an explicit mapping rather than a silent merge/resample.
+
+### 0.6 Information-set checklist
+
+For every decision variable at time `t`, identify the information set available at `t`. Future realized/actual values must not enter the decision unless the problem explicitly grants perfect foresight. Realized values may still be valid later for evaluation, settlement, residual analysis, or simulation of what happened after the decision.
+
+### 0.7 Human gate
+
+Before implementation, the human should be able to inspect the proposed CFQ, family classification, required data, unresolved data/interface issues, proposed MVM, success criteria, what success proves, and what it does not prove.
+
+---
 
 ## A. Universal layer — every modeling problem
 
