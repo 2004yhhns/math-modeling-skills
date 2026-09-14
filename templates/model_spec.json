@@ -5,13 +5,53 @@
   "features": [],
   "decision_variables": [],
   "constraints": [],
+  "upstream_dependencies": [],
+  "downstream_consumers": [],
+  "model_interfaces": [
+    {
+      "from": "",
+      "to": "",
+      "quantity": "",
+      "unit": "",
+      "resolution": "",
+      "availability_rule": "",
+      "notes": ""
+    }
+  ],
+  "data_requirements": [
+    {
+      "quantity": "",
+      "source": "",
+      "required_unit": "",
+      "required_resolution": "",
+      "availability_requirement": "",
+      "required_for": ""
+    }
+  ],
+  "information_constraints": [],
+  "resolution_requirements": {
+    "temporal": "",
+    "spatial": "",
+    "notes": ""
+  },
   "approved_models": [],
   "primary_candidate": "",
   "baseline_models": [],
   "validation_model": "",
+  "candidate_feasibility_targets": [
+    {
+      "candidate": "",
+      "mechanism_or_interface": "",
+      "why_failure_matters": "",
+      "evidence_needed": [],
+      "required_data": [],
+      "constraints_to_preserve": []
+    }
+  ],
   "split_strategy": {
     "type": "",
     "group_key": "",
+    "time_key": "",
     "reason": ""
   },
   "metrics": [],
