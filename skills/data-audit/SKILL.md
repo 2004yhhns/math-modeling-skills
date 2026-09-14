@@ -9,6 +9,27 @@ description: Audit competition data before modeling. Use to inspect schema, unit
 
 Determine what the data can and cannot support before model selection, and preserve enough data semantics for downstream feasibility tests to verify model interfaces without repeating the full audit.
 
+## Repository resource loading
+
+Treat the directory containing `skills/`, `knowledge/`, `templates/`, and `algorithms/` as the **skills repository root**.
+
+The user only needs to invoke this Skill. Do not require the user to separately list repository resources.
+
+Load resources in this order:
+
+1. Read this `SKILL.md`.
+2. Read this Skill's local reference:
+   - `skills/data-audit/references/data-audit-checklist.md`
+3. Read live-project state:
+   - `project/problem_brief.md`
+   - `project/assumption_ledger.md`, when relevant
+4. Read the live project's raw data and attachments.
+5. Initialize `project/data_audit.json` from `templates/data_audit.json` when it does not exist.
+6. Use shared `knowledge/` only when needed to interpret domain-specific data semantics, units, time structure, or measurement meaning. Do **not** use shared knowledge here to perform final model selection.
+7. Do not use `algorithms/` for modeling in this phase. Small deterministic inspection scripts are allowed when needed for auditing.
+
+The data audit records **facts about the current data**. General statements such as “XGBoost fits tabular data” belong to shared model knowledge or model-selection, not to `data_audit.json`.
+
 ## Read
 
 - `project/problem_brief.md`
@@ -70,3 +91,4 @@ The audit should describe cleaning/preparation decisions explicitly. Do not hide
 - Do not default to random train/test split without checking group, time, spatial, or repeated-measure structure.
 - Do not treat future-realized values as decision-time inputs.
 - Do not silently resolve unit, timestamp, coordinate, or semantic mismatches.
+- Do not declare a final model from data audit alone.
