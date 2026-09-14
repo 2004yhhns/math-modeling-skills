@@ -18,6 +18,7 @@ The human owns the final modeling decisions. Your role is to help structure the 
 8. Do not fabricate metrics, references, experiments, or numerical results.
 9. Preserve the problem statement, units, constraints, and evaluation target.
 10. A failed validation step must send the workflow back to the relevant earlier decision.
+11. Before committing substantial competition time to a risky model or final topic choice, use a minimum viable feasibility test when practical.
 
 ## Live-project boundary
 
@@ -46,12 +47,15 @@ Problem understanding
 → problem/task classification
 → baseline design
 → candidate model selection
+→ minimum viable feasibility test
 → implementation
 → experiment logging
 → validation
 → robustness / sensitivity
 → interpretation
 → claims supported by evidence
+
+The feasibility step is a phase gate, not a full experiment campaign. It should test the smallest executable instance that preserves the central difficulty. If the result is `HOLD` or `NO_GO`, do not silently proceed to full model building.
 
 ## Required decision discipline
 
@@ -66,7 +70,8 @@ Before implementing a primary model, make explicit:
 - alternative/validation candidate,
 - split strategy,
 - metrics,
-- major risks.
+- major risks,
+- feasibility status when a feasibility test was required.
 
 ## Project artifacts
 
@@ -78,6 +83,7 @@ When available, prefer reading these before major decisions:
 - `project/baseline_solution.json`
 - `project/model_selection_audit.json`
 - `project/model_spec.json`
+- `project/feasibility_test.json`
 - `project/experiment_log.json`
 
 Templates in this repository define their structure; the actual populated files belong to the live project.
