@@ -9,6 +9,28 @@ description: Structure a mathematical modeling competition problem before choosi
 
 Convert the original statement into a reliable project brief that downstream data-audit, model-selection, and feasibility-test can consume. Do not select final models in this skill.
 
+## Repository resource loading
+
+Treat the directory containing `skills/`, `knowledge/`, `templates/`, and `algorithms/` as the **skills repository root**.
+
+The user only needs to invoke this Skill. Do not require the user to separately list repository resources.
+
+Load resources in this order:
+
+1. Read this `SKILL.md`.
+2. Read this Skill's local references:
+   - `skills/problem-analysis/references/problem-analysis-rules.md`
+3. Read the live project's problem statement and attachments.
+4. Read existing live-project state when present:
+   - `project/problem_brief.md`
+   - `project/assumption_ledger.md`
+5. When initializing an artifact, use the repository templates:
+   - `templates/problem_brief.md`
+   - `templates/assumption_ledger.md`
+6. Do not scan unrelated `knowledge/` or `algorithms/` by default. Problem analysis should remain method-neutral unless a specific mathematical concept is needed to understand the statement.
+
+Repository templates are clean source templates. Populate copies in the live project's `project/` directory; do not write live competition state back into `templates/`.
+
 ## Read
 
 1. Problem statement and attachments available in the current project.
