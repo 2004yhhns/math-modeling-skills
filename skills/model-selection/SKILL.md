@@ -1,6 +1,6 @@
 ---
 name: model-selection
-description: Select defensible models for a mathematical modeling subproblem. Use after the problem and data regime are understood. Requires baselines, candidate comparison, rejected-model reasons, interface/data requirements, feasibility risks, and a validation plan.
+description: Select defensible models for a mathematical modeling subproblem. Use after the problem and data regime are understood and audited/prepared. Requires baselines, candidate comparison, rejected-model reasons, interface/data requirements, feasibility risks, and a validation plan.
 ---
 
 # Model Selection
@@ -13,9 +13,12 @@ Build a defensible model ladder rather than naming one sophisticated model, and 
 
 1. `project/problem_brief.md`
 2. `project/data_audit.json`
-3. `project/assumption_ledger.md`
-4. `references/selection-rules.md`
-5. Relevant shared files under `knowledge/` only as needed.
+3. `project/data_preparation.json`, if data-preparation has been run
+4. `project/assumption_ledger.md`
+5. `references/selection-rules.md`
+6. Relevant shared files under `knowledge/` only as needed.
+
+Prefer prepared data only when `project/data_preparation.json` marks it `READY` or `READY_WITH_WARNINGS`. Carry all unresolved issues and downstream usage restrictions into model selection. If preparation status is `HOLD`, do not silently proceed with a candidate that depends on the blocked data.
 
 ## Step 1 — Classify the subproblem
 
@@ -66,6 +69,8 @@ For each candidate give:
 
 If a candidate depends on an upstream model output, explicitly describe the interface. Examples: forecast → optimizer, estimated parameter → simulator, detector → localizer, simulation output → decision rule.
 
+Do not treat a data-preparation choice as ground truth. If a candidate's performance may depend strongly on an imputation, exclusion, resampling, or smoothing decision, record that dependency as a model risk and require sensitivity/validation.
+
 ## Step 4 — Compare and reject
 
 Explicitly identify:
@@ -87,7 +92,8 @@ For the primary candidate and any serious alternative, identify:
 - why failure would matter downstream,
 - what evidence would increase confidence,
 - what data are needed for that test,
-- whether a special information-timing or resolution constraint must be preserved.
+- whether a special information-timing or resolution constraint must be preserved,
+- whether conclusions depend materially on a data-preparation choice.
 
 These are **candidate feasibility targets**, not the final CFQ. The `feasibility-test` skill owns the final critical-path analysis and CFQ formulation.
 
@@ -104,7 +110,7 @@ Baseline 0
 
 Do not declare a winner before experiments.
 
-If a candidate has substantial implementation, numerical, interface, or information-timing risk, mark it as requiring feasibility testing before full model building.
+If a candidate has substantial implementation, numerical, interface, information-timing, or data-preparation sensitivity risk, mark it as requiring feasibility testing before full model building.
 
 ## Outputs
 
@@ -121,6 +127,7 @@ The outputs should preserve enough information for downstream feasibility testin
 - upstream/downstream interfaces,
 - information restrictions,
 - resolution requirements,
+- unresolved data-preparation restrictions,
 - major risks,
 - candidate feasibility targets,
 - experiment/validation plan.
@@ -132,4 +139,5 @@ The outputs should preserve enough information for downstream feasibility testin
 - no accuracy-only evaluation when other risks matter,
 - no causal interpretation from predictive performance alone,
 - no candidate that silently requires data unavailable at the relevant decision time,
+- no silent reuse of a high-impact preparation decision as if it were verified truth,
 - no handoff to model-building when a major feasibility risk has been identified but not tested.
