@@ -44,6 +44,38 @@ math-modeling-skills/
 - `algorithms/`: reusable implementation guidance or code.
 - `examples/`: optional demonstrations of how the skills behave on example problems.
 
+## Invocation contract
+
+The user should invoke a stage by naming its `SKILL.md` and the current target. The skill is responsible for orchestrating its own dependencies.
+
+Do **not** require the user to manually enumerate every file under `references/`, `knowledge/`, or `algorithms/` on each invocation. If the selected `SKILL.md` instructs Codex to read those resources conditionally, Codex should load only what is relevant to the current problem and model family.
+
+`AGENTS.md` supplies global governance and decision boundaries. A `SKILL.md` supplies the stage-specific procedure. The user prompt only needs to specify the current task, scope, and any desired stopping point.
+
+Canonical feasibility invocation:
+
+```text
+Use `math-modeling-skills/skills/feasibility-test/SKILL.md`
+to run a feasibility test for Q1.
+Stop at the Human Gate and present the Feasibility Card before implementation.
+```
+
+A concise Chinese equivalent is:
+
+```text
+使用 `math-modeling-skills/skills/feasibility-test/SKILL.md`
+对 Q1 做 feasibility test，到 Human Gate 暂停并给我 Feasibility Card。
+```
+
+The longer form below is optional and mainly useful for debugging or when repository visibility/path resolution is uncertain:
+
+```text
+Use the existing upstream project artifacts and let the selected skill
+load its references, knowledge, and algorithms as needed.
+```
+
+If the short invocation fails because Codex cannot locate the repository, skill file, or upstream project artifacts, fix the workspace/path visibility rather than compensating by copying all skill instructions into the prompt.
+
 ## Recommended usage
 
 Keep a real competition in a separate directory, for example:
@@ -144,10 +176,18 @@ Use `feasibility-test` before committing to full model building, especially when
 
 It should:
 
-- define the smallest decisive prototype,
-- run the central mechanism end to end,
+- build the task dependency graph and identify the final evaluation target,
+- identify critical paths and critical failure points,
+- derive the Core Feasibility Question (CFQ),
+- select primary and secondary model families from the CFQ rather than keywords,
+- derive required data from the CFQ,
+- run an MVM-specific data readiness and model-interface check using the upstream data audit,
+- propose the smallest decisive prototype without simplifying away the defining difficulty,
+- stop at the Human Gate and present a Feasibility Card before substantial implementation,
+- after approval, run the central mechanism end to end,
 - check constraints, units, runtime, stability, leakage/information timing, and basic sensitivity,
 - load only the relevant family-specific checks for optimization, prediction, geometry/search, PDE/mechanism, routing, or stochastic simulation,
+- run a counterfactual review,
 - classify blockers and return `GO`, `GO_WITH_RISKS`, `HOLD`, or `NO_GO`.
 
 Expected project output:
