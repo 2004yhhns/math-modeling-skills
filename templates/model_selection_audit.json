@@ -2,11 +2,29 @@
   "problem_id": "",
   "task_type": "",
   "data_regime": "",
+  "literature": {
+    "project_directory": "paper/literature/",
+    "search_scope": [],
+    "core_papers": [],
+    "evidence_gaps": [],
+    "cross_stage_findings": []
+  },
+  "benchmark_landscape": [
+    {
+      "family": "",
+      "role_in_field": "baseline | standard_benchmark | strong_modern | improved_or_problem_specific",
+      "evidence": [],
+      "typical_strengths": [],
+      "typical_limitations": [],
+      "fit_to_current_problem": ""
+    }
+  ],
   "baselines": [],
   "candidates": [
     {
       "name": "",
-      "role": "primary_candidate",
+      "role": "baseline | standard_benchmark | primary_candidate | alternative | improved_candidate",
+      "evidence": [],
       "fit_reason": "",
       "assumptions": [],
       "data_requirements": [],
@@ -15,39 +33,49 @@
       "expected_outputs": [],
       "upstream_dependencies": [],
       "downstream_consumers": [],
+      "forbidden_information": [],
       "interface_risks": [],
       "information_timing_risks": [],
-      "resolution_requirements": {
-        "temporal": "",
-        "spatial": "",
-        "notes": ""
-      },
       "strengths": [],
       "weaknesses": [],
       "interpretability": "",
       "computational_cost": "",
       "implementation_or_numerical_risks": [],
       "validation_method": "",
+      "risk_triage": "LOW_RISK | HIGH_RISK | BLOCKED",
+      "feasibility_required": false,
+      "feasibility_status": "NOT_REQUIRED | PENDING | GO | GO_WITH_RISKS | HOLD | NO_GO",
+      "screening_status": "NOT_RUN | PASSED | REJECTED",
       "status": "proposed"
     }
   ],
   "rejected_models": [
     {
       "name": "",
+      "stage": "research | risk_triage | feasibility | screening",
+      "reason": "",
+      "evidence": []
+    }
+  ],
+  "candidate_feasibility_targets": [],
+  "screening_protocol": {
+    "data": "",
+    "split_or_cv": "",
+    "metrics": [],
+    "compute_budget": "",
+    "preprocessing_boundary": "",
+    "random_seed_policy": "",
+    "comparison_dimensions": []
+  },
+  "screening_results": [],
+  "shortlist": [
+    {
+      "model": "",
+      "role": "baseline | primary | alternative",
       "reason": ""
     }
   ],
-  "recommended_experiment_ladder": [],
-  "major_risks": [],
-  "candidate_feasibility_targets": [
-    {
-      "candidate": "",
-      "mechanism_or_interface": "",
-      "why_failure_matters": "",
-      "evidence_needed": [],
-      "required_data": [],
-      "constraints_to_preserve": []
-    }
-  ],
-  "evidence_required_for_selection": []
+  "human_gate_1": "PENDING",
+  "human_gate_2": "PENDING",
+  "evidence_required_for_final_selection": []
 }
