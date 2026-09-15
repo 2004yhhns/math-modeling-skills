@@ -1,59 +1,118 @@
 ---
 name: model-validation
-description: Validate mathematical modeling results against baselines and failure modes. Use after experiments exist to check generalization, leakage, residuals, robustness, and whether conclusions are actually supported.
+description: Validate full modeling results against baselines, alternatives and failure modes; recommend the defensible final model and route diagnosed weaknesses into an explicit improvement loop.
 ---
 
 # Model Validation
 
 ## Goal
 
-Determine whether apparent model improvement is real and competition-defensible.
+Determine whether apparent improvement is real, generalizable and competition-defensible, then diagnose what should be improved when it is not.
+
+Validation is where the shortlist is judged with full evidence. The screening winner is not automatically the final model.
+
+## Workflow position
+
+```text
+shortlist
+   ↓
+model-building
+   ↓
+model-validation
+   ├─ baseline/alternative comparison
+   ├─ generalization & leakage
+   ├─ robustness/sensitivity
+   ├─ error/residual analysis
+   └─ interpretation
+   ↓
+final recommendation
+   ↓
+if needed: IMPROVEMENT LOOP
+   ├─ data diagnosis issue      → data-audit
+   ├─ preparation issue        → data-preparation
+   ├─ wrong model family       → model-selection
+   ├─ implementation/tuning    → model-building
+   └─ validation-design issue  → model-validation redesign with recorded approval
+```
 
 ## Repository resource loading
 
-Treat the directory containing `skills/`, `knowledge/`, `templates/`, and `algorithms/` as the **skills repository root**.
+Load:
 
-The user only needs to invoke this Skill. Resource lookup is this Skill's responsibility.
-
-Load resources in this order:
-
-1. Read this `SKILL.md`.
-2. Read local validation rules:
-   - `skills/model-validation/references/validation-checklist.md`
-3. Read live-project evidence:
+1. this `SKILL.md`;
+2. `skills/model-validation/references/validation-checklist.md`;
+3. live-project evidence:
    - `project/model_spec.json`
    - `project/baseline_solution.json`
+   - `project/model_selection_audit.json`
    - `project/experiment_log.json`
    - `project/data_audit.json`
    - `project/data_preparation.json`, if present
-4. Read relevant `knowledge/` only when needed to interpret model-specific failure modes, residual assumptions, calibration requirements, optimization feasibility conditions, or robustness expectations.
-5. Inspect `algorithms/` only for reusable validation utilities such as grouped validation, residual diagnostics, sensitivity analysis, robustness checks, or optimization-feasibility checks.
-6. Initialize `project/validation_summary.json` from `templates/validation_summary.json` when needed.
-7. Write validation results to the live project only. Do not modify shared repository knowledge or templates as a substitute for fixing a failed model.
+   - relevant feasibility evidence, if applicable
+   - `paper/literature/benchmark_landscape.md` and `literature_matrix.md` when literature established validation standards or interpretation limits
+4. relevant reusable `knowledge/`/validation utilities only as needed;
+5. initialize `project/validation_summary.json` from the template when needed.
 
-Validation must use the metrics, split strategy, and validation plan approved in `model_spec.json`. If those rules must change, record the reason and send the workflow back to model-selection rather than silently changing the evaluation after seeing results.
+Use the split, metrics and validation plan approved in `model_spec.json`. Do not change evaluation after seeing results without recording the reason and approval.
 
-## Read
+## Minimum validation questions
 
-- `project/model_spec.json`
-- `project/baseline_solution.json`
-- `project/experiment_log.json`
-- `project/data_audit.json`
-- `references/validation-checklist.md`
+1. Does each serious model improve meaningfully over the baseline on approved metrics?
+2. Was the approved split/CV/group/time strategy actually used?
+3. Is there leakage or illegal information use?
+4. Are residuals/errors systematically structured?
+5. Does performance generalize across important groups, times, datasets or regimes?
+6. Are conclusions stable under reasonable perturbations and defensible alternative preparation choices?
+7. Are uncertainty/calibration/constraint checks satisfactory when relevant?
+8. Are interpretation claims supported by the model and evidence?
+9. Does the apparent best model remain preferable after robustness, complexity, interpretability and downstream usefulness are considered?
+10. Are differences large/stable enough to justify preferring a more complex model?
 
-## Minimum checks
+## Final recommendation
 
-1. Does the primary model beat the baseline on the approved metrics?
-2. Was the approved split strategy actually used?
-3. Is there any sign of leakage?
-4. Are residuals / errors systematically structured?
-5. Does performance hold across important groups, time periods, or regimes?
-6. Are main conclusions stable under reasonable perturbations?
-7. Are interpretation claims consistent with what the model can establish?
-8. Does the apparent best model remain preferable after robustness and generalization checks?
+Validation may recommend:
+
+- one final primary model;
+- a primary model plus a simpler baseline/alternative retained for comparison;
+- an ensemble only when justified by evidence;
+- no final model yet when blocking evidence remains.
+
+Record why the recommendation is preferable, not only its headline score.
+
+## Improvement diagnosis
+
+When validation exposes weakness, classify the root cause before changing anything:
+
+- `DATA_DIAGNOSIS` → return to `data-audit`;
+- `DATA_PREPARATION` → return to `data-preparation`;
+- `MODEL_FAMILY` → return to `model-selection` and, if needed, literature/candidate research;
+- `IMPLEMENTATION_OR_TUNING` → return to `model-building`;
+- `VALIDATION_DESIGN` → revise validation protocol transparently;
+- `INTERPRETATION_ONLY` → limit/rewrite the conclusion rather than changing the model unnecessarily.
+
+Each improvement cycle must record:
+
+- observed failure/weakness;
+- evidence;
+- diagnosed owner stage;
+- proposed change;
+- whether a Human Gate is required;
+- new experiment/validation id;
+- whether the change actually improved the target without creating new problems.
+
+Do not perform endless optimization. Stop when gains are negligible, evidence is stable, competition constraints/time make further work unjustified, or the remaining limitation should simply be reported.
 
 ## Output
 
-Create or update `project/validation_summary.json`.
+Create/update `project/validation_summary.json` with:
 
-Validation may recommend a final model, but the primary candidate from model-selection is not automatically final. If a validation failure changes the modeling decision, send the workflow back to model-selection or model-building and record why.
+- model comparison;
+- baseline comparison;
+- validation checks;
+- final recommendation/status;
+- blocking issues;
+- improvement diagnosis and routing;
+- improvement history;
+- next action.
+
+Validation results and improvement evidence belong to the live project, not reusable repository knowledge.
