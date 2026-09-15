@@ -1,6 +1,6 @@
 # Feasibility Test Rules
 
-This file separates universal feasibility checks from model-family-specific checks. Run the universal layer for every candidate; load only the special sections relevant to the current CFQ.
+This file separates universal feasibility checks from model-family-specific checks. Apply it only after model-selection has identified a genuinely high-risk candidate/mechanism (or when feasibility-test independently returns `NOT_REQUIRED`). Run the universal layer for every feasibility test, not for every model candidate; load only the special sections relevant to the current CFQ.
 
 ## 0. Pre-MVM CFQ and data/interface readiness rules
 
@@ -71,7 +71,7 @@ Before implementation, the human should be able to inspect the proposed CFQ, fam
 
 ---
 
-## A. Universal layer — every modeling problem
+## A. Universal layer — every triggered feasibility test
 
 ### A1. End-to-end executability
 
@@ -93,9 +93,9 @@ Record prototype runtime and identify the main scaling dimension: samples, time 
 
 Change one important input or parameter by a small, reasonable amount. The response should be explainable. Large discontinuities or nonsensical invariance are warning signs unless theoretically expected.
 
-### A6. Baseline comparison
+### A6. Reference sanity check
 
-Whenever meaningful, compare against the simplest valid benchmark. The feasibility test asks whether the method adds useful capability, not whether it is already final-best.
+When a simple reference is needed to interpret the CFQ, compare against the simplest valid benchmark or known sanity case. Do not turn feasibility into full candidate ranking; comparative model screening belongs to model-selection.
 
 ### A7. Information discipline
 
@@ -128,7 +128,7 @@ Typical blockers: infeasibility from contradictory constraints, wrong sign conve
 
 ## C. Prediction / classification
 
-Minimum viable instance: leakage-safe baseline on a representative subset or simple split.
+Minimum viable instance: the smallest leakage-safe prototype that preserves the high-risk prediction/classification mechanism being tested.
 
 Check:
 
