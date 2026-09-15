@@ -1,47 +1,56 @@
 {
   "task_data_regime": "",
-  "rows": null,
-  "features": null,
-  "target": "",
+  "dataset_inventory": [
+    {
+      "dataset_id": "",
+      "source_file": "",
+      "rows": null,
+      "columns": null,
+      "features": null,
+      "observation_unit": "",
+      "independent_unit": "",
+      "unique_groups_or_subjects": null,
+      "target_candidates": [],
+      "identifier_fields": [],
+      "group_keys": [],
+      "repeated_measure_structure": "",
+      "intended_question_usage": [],
+      "notes": ""
+    }
+  ],
   "variable_catalog": [
     {
+      "dataset_id": "",
       "name": "",
       "meaning": "",
-      "role": "input | target | state | parameter | constraint | identifier | other",
+      "role": "input | target | state | parameter | constraint | identifier | grouping | metadata | covariate | derived | potential_leakage | other",
       "unit": "",
       "source": "",
       "observed_or_derived": "observed | forecast | estimated | derived | future_realized | unknown",
       "availability_time": "",
       "resolution": "",
+      "allowed_as_predictor": null,
       "notes": ""
     }
   ],
-  "units": {},
   "missingness": {},
-  "duplicates": null,
+  "duplicates": {},
   "outliers_or_range_issues": [],
-  "group_structure": {
-    "exists": false,
-    "group_key": "",
-    "notes": ""
-  },
-  "time_structure": {
-    "exists": false,
-    "time_key": "",
-    "sampling_frequency": "",
-    "timezone_or_clock_convention": "",
-    "forecast_issue_time": "",
-    "forecast_horizon": "",
-    "decision_interval": "",
-    "availability_notes": "",
-    "notes": ""
-  },
-  "spatial_structure": {
-    "exists": false,
-    "coordinate_system": "",
-    "spatial_resolution": "",
-    "notes": ""
-  },
+  "group_structure": [
+    {
+      "dataset_id": "",
+      "exists": false,
+      "observation_unit": "",
+      "group_unit": "",
+      "group_key": "",
+      "nesting": "",
+      "independence_implication": "",
+      "split_implication": "",
+      "notes": ""
+    }
+  ],
+  "time_structure": [],
+  "spatial_structure": [],
   "information_timing": {
     "decision_times": [],
     "available_at_decision_time": [],
@@ -51,19 +60,69 @@
   "problem_data_mapping": [
     {
       "problem_quantity": "",
+      "dataset_id": "",
       "data_field_or_derivation": "",
       "mapping_status": "clear | derived | ambiguous | missing",
       "notes": ""
     }
   ],
+  "question_data_mapping": [
+    {
+      "question_id": "Q1",
+      "conceptual_inputs": [],
+      "conceptual_target": "",
+      "datasets": [],
+      "verified_fields_or_derivations": [],
+      "observation_and_grouping_requirements": [],
+      "upstream_outputs_consumed": [],
+      "missing_or_ambiguous_requirements": [],
+      "supportable_outputs": [],
+      "downstream_consumers": [],
+      "data_support_status": "SUPPORTED | PARTIALLY_SUPPORTED | BLOCKED | REQUIRES_ASSUMPTION | REQUIRES_EXTERNAL_DATA",
+      "evidence": [],
+      "notes": ""
+    }
+  ],
+  "dataset_compatibility": [
+    {
+      "dataset_a": "",
+      "dataset_b": "",
+      "common_features": [],
+      "semantic_compatibility": "",
+      "unit_compatibility": "",
+      "measurement_protocol_compatibility": "",
+      "target_compatibility": "",
+      "cohort_or_population_shift": "",
+      "direct_concatenation_allowed": null,
+      "allowed_integration_strategies": [],
+      "unresolved_issues": []
+    }
+  ],
   "leakage_risks": [],
-  "recommended_split": {
-    "type": "",
-    "group_key": "",
-    "time_key": "",
-    "reason": ""
+  "recommended_split": [
+    {
+      "dataset_id": "",
+      "type": "",
+      "group_key": "",
+      "time_key": "",
+      "reason": ""
+    }
+  ],
+  "task_dependency_graph": {
+    "source": "project/problem_brief.md",
+    "nodes": [],
+    "edges": []
   },
-  "cleaning_or_preparation_decisions": [],
+  "data_dependency_graph": {
+    "nodes": [],
+    "edges": []
+  },
+  "executable_dependency_graph": {
+    "nodes": [],
+    "edges": [],
+    "blocked_or_conditional_interfaces": []
+  },
+  "preparation_requirements": [],
   "unresolved_interface_issues": [],
   "major_quality_issues": []
 }
