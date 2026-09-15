@@ -4,14 +4,30 @@
       "id": "EXP001",
       "problem_id": "",
       "model": "",
-      "status": "planned",
-      "features": [],
-      "split": "",
+      "model_role": "baseline | primary | alternative",
+      "status": "planned | running | completed | failed | superseded",
+      "code_or_config_version": "",
+      "data_sources": [],
+      "feature_set": [],
+      "split_or_cv": {
+        "type": "",
+        "group_key": "",
+        "time_key": "",
+        "fold_or_holdout_id": "",
+        "notes": ""
+      },
+      "model_dependent_preprocessing": [],
       "parameters": {},
+      "tuning_budget": "",
+      "random_seed": null,
       "metrics": {},
+      "runtime": {},
       "result_files": [],
+      "diagnostic_files": [],
       "warnings": [],
-      "conclusion": ""
+      "failures": [],
+      "deviations_from_model_spec": [],
+      "provisional_conclusion": ""
     }
   ]
 }
