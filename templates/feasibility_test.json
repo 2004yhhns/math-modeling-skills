@@ -1,0 +1,49 @@
+{
+  "problem_id": "",
+  "candidate": "",
+  "risk_trigger": "",
+  "status": "NOT_REQUIRED | PENDING | GO | GO_WITH_RISKS | HOLD | NO_GO",
+  "critical_mechanism_or_interface": "",
+  "why_ordinary_screening_is_insufficient": "",
+  "downstream_consequence_if_failure": "",
+  "cfq": {
+    "question": "",
+    "success_evidence": [],
+    "failure_evidence": []
+  },
+  "required_data_and_interface": [
+    {
+      "quantity_or_interface": "",
+      "source": "",
+      "meaning": "",
+      "unit": "",
+      "resolution": "",
+      "availability_rule": "",
+      "preparation_dependency": "",
+      "blocking_issue": ""
+    }
+  ],
+  "mvm": {
+    "included_mechanisms_or_constraints": [],
+    "excluded_noncritical_components": [],
+    "inputs": [],
+    "outputs": [],
+    "success_criteria": [],
+    "what_success_proves": [],
+    "what_success_does_not_prove": []
+  },
+  "human_gate_status": "PENDING | APPROVED | REJECTED | NOT_REQUIRED",
+  "checks": {
+    "execution_and_runtime": [],
+    "shape_range_unit_sanity": [],
+    "constraint_checks": [],
+    "numerical_stability_or_repeatability": [],
+    "leakage_or_information_legality": [],
+    "perturbation_checks": [],
+    "preparation_sensitivity": [],
+    "family_specific_checks": []
+  },
+  "evidence": [],
+  "blockers": [],
+  "next_action": "SCREEN | REDESIGN | RETURN_UPSTREAM | STOP"
+}
