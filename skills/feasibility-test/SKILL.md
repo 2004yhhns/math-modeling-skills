@@ -46,7 +46,8 @@ Do not invoke this Skill for every mature standard model. Ordinary candidates wh
 5. `project/model_spec.json`, if already initialized
 6. `project/assumption_ledger.md`
 7. `references/feasibility-rules.md`
-8. relevant `knowledge/`/`algorithms/` only as needed.
+8. relevant `knowledge/`/`algorithms/` only as needed;
+9. initialize `project/feasibility_test.json` from `templates/feasibility_test.json` when a feasibility record is needed.
 
 Reuse upstream diagnosis. Do not repeat a full data audit, literature review, or model-selection exercise.
 
