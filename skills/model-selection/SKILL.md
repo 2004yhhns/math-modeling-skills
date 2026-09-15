@@ -1,182 +1,266 @@
 ---
 name: model-selection
-description: Select defensible models for a mathematical modeling subproblem. Use after the problem and data regime are understood and audited/prepared. Requires baselines, candidate comparison, rejected-model reasons, interface/data requirements, feasibility risks, and a validation plan.
+description: Research the modeling landscape, generate defensible candidates, triage feasibility risk, run lightweight comparable screening, and produce a shortlist/experiment contract for full model building.
 ---
 
 # Model Selection
 
 ## Goal
 
-Build a defensible model ladder rather than naming one sophisticated model, and preserve enough information for `feasibility-test` to identify the real execution bottleneck without reconstructing model assumptions from scratch.
+Turn the audited problem and data regime into an evidence-backed shortlist. Do not jump from “this model sounds suitable” to a final model.
+
+This stage owns four linked jobs:
+
+1. literature/model research;
+2. benchmark-landscape and candidate generation;
+3. risk triage and optional feasibility handoff;
+4. lightweight screening under comparable conditions.
+
+The final competition model is **not** selected here. This stage normally hands a small shortlist to `model-building`; `model-validation` later supplies the evidence for the final choice.
+
+## Position in the workflow
+
+```text
+problem-analysis
+→ data-audit
+→ data-preparation
+→ model-selection
+    ├─ literature research
+    ├─ benchmark landscape
+    ├─ candidate pool
+    ├─ risk triage
+    │    └─ high-risk route → feasibility-test → GO/NO-GO
+    └─ screening experiment
+→ shortlist
+→ model-building
+→ model-validation
+→ improvement loop
+```
 
 ## Repository resource loading
 
-Treat the directory containing `skills/`, `knowledge/`, `templates/`, and `algorithms/` as the **skills repository root**.
+Treat the directory containing `skills/`, `knowledge/`, `templates/`, and `algorithms/` as the skills repository root. The live competition project is separate.
 
-The user only needs to invoke this Skill, for example:
+Load in this order:
 
-`Use model-selection for Q4.`
-
-Do not require the user to separately list `references/`, `knowledge/`, `algorithms/`, or `templates/`.
-
-Load resources in this order:
-
-1. Read this `SKILL.md`.
-2. Read local rules under:
-   - `skills/model-selection/references/`
-   - always read `selection-rules.md`
-   - read other local routing/catalog references when present
-3. Read current live-project state:
+1. this `SKILL.md`;
+2. `skills/model-selection/references/selection-rules.md`;
+3. live-project state:
    - `project/problem_brief.md`
    - `project/data_audit.json`
    - `project/data_preparation.json`, if present
    - `project/assumption_ledger.md`
-4. Classify the current subproblem into a problem family.
-5. Inspect shared `knowledge/` selectively:
-   - first use an index/catalog if one exists;
-   - then read only the relevant family, such as `knowledge/prediction/`, `knowledge/classification/`, `knowledge/optimization/`, or `knowledge/evaluation/`;
-   - read concrete model cards only for serious candidates.
-6. Use shared knowledge to compare **general model requirements** against **current data facts** from `data_audit.json`.
-7. Inspect `algorithms/` only to check whether reusable implementations or utilities already exist for serious candidates. Model selection must not prefer a model merely because an implementation happens to exist.
-8. When creating outputs, initialize from:
-   - `templates/baseline_solution.json`
-   - `templates/model_selection_audit.json`
-   - `templates/model_spec.json`
-9. Populate the copies in the live project's `project/` directory. Never write competition-specific state into repository `templates/`, `knowledge/`, or `algorithms/`.
+4. relevant reusable `knowledge/` selectively;
+5. current-project literature under `paper/literature/`, if already present;
+6. external literature when needed;
+7. `algorithms/` only after serious candidates are known, to check reusable implementations/utilities;
+8. initialize project outputs from repository templates.
 
-If a relevant shared knowledge card does not exist, continue using sound mathematical/modeling knowledge and explicitly note the knowledge-base gap. Do not stop the workflow merely because the repository is incomplete.
+Never put competition-specific papers, notes, or literature conclusions into the reusable skills repository.
 
-## Read
+## External literature policy
 
-1. `project/problem_brief.md`
-2. `project/data_audit.json`
-3. `project/data_preparation.json`, if data-preparation has been run
-4. `project/assumption_ledger.md`
-5. `references/selection-rules.md`
-6. Relevant shared files under `knowledge/` only as needed.
+When external literature can materially improve candidate design or validation design, search it. Prefer peer-reviewed journal/conference papers, official dataset papers, authoritative reviews, and established benchmark studies.
 
-Prefer prepared data only when `project/data_preparation.json` marks it `READY` or `READY_WITH_WARNINGS`. Carry all unresolved issues and downstream usage restrictions into model selection. If preparation status is `HOLD`, do not silently proceed with a candidate that depends on the blocked data.
-
-## Step 1 — Classify the subproblem
-
-Identify:
-
-- mathematical task,
-- inputs,
-- outputs,
-- constraints,
-- evaluation target,
-- upstream dependencies,
-- downstream consumers of important outputs,
-- information-availability restrictions,
-- temporal/spatial resolution requirements,
-- interpretability requirement,
-- extrapolation requirement.
-
-## Step 2 — Design baselines
-
-Choose:
-
-- Baseline 0: simplest meaningful benchmark.
-- Baseline 1: standard competition-grade benchmark when useful.
-
-Each baseline should state what data it requires and what downstream output it produces.
-
-## Step 3 — Generate candidates
-
-Propose 2–4 candidates from distinct methodological families.
-
-For each candidate give:
-
-- why it fits,
-- assumptions,
-- exact data requirements,
-- required preprocessing or transformations,
-- expected inputs and outputs,
-- upstream dependency,
-- downstream consumer / interface,
-- strengths,
-- weaknesses,
-- interpretability,
-- computation cost,
-- overfitting risk,
-- information-timing or leakage risks,
-- implementation/numerical risks,
-- validation method.
-
-If a candidate depends on an upstream model output, explicitly describe the interface. Examples: forecast → optimizer, estimated parameter → simulator, detector → localizer, simulation output → decision rule.
-
-Do not treat a data-preparation choice as ground truth. If a candidate's performance may depend strongly on an imputation, exclusion, resampling, or smoothing decision, record that dependency as a model risk and require sensitivity/validation.
-
-## Step 4 — Compare and reject
-
-Explicitly identify:
-
-- primary candidate,
-- baseline(s),
-- independent validation / alternative candidate,
-- rejected models and reasons.
-
-Do not compare models only by expected predictive accuracy. Include data readiness, information legality, downstream interface risk, computational feasibility, and ease of validation.
-
-## Step 5 — Identify feasibility targets
-
-Before handing off to `feasibility-test`, record candidate risks that deserve a minimum viable test.
-
-For the primary candidate and any serious alternative, identify:
-
-- the most important mechanism or model-to-model interface that may fail,
-- why failure would matter downstream,
-- what evidence would increase confidence,
-- what data are needed for that test,
-- whether a special information-timing or resolution constraint must be preserved,
-- whether conclusions depend materially on a data-preparation choice.
-
-These are **candidate feasibility targets**, not the final CFQ. The `feasibility-test` skill owns the final critical-path analysis and CFQ formulation.
-
-## Step 6 — Experiment ladder
-
-Recommend an order such as:
+All current-project literature belongs in the live project:
 
 ```text
-Baseline 0
-→ Baseline 1
-→ Candidate A
-→ Candidate B
+paper/
+└── literature/
+    ├── downloaded/              # PDFs/files when downloading is permitted and useful
+    ├── literature_matrix.md     # structured evidence extraction
+    ├── benchmark_landscape.md   # field-level method map
+    └── literature_notes.md      # synthesis, limitations, open questions
 ```
 
-Do not declare a winner before experiments.
+Rules:
 
-If a candidate has substantial implementation, numerical, interface, information-timing, or data-preparation sensitivity risk, mark it as requiring feasibility testing before full model building.
+- never save project-specific papers under `math-modeling-skills/knowledge/`, `skills/`, `references/`, or `algorithms/`;
+- preserve title, authors, year, venue and source/link/identifier for traceability;
+- do not infer a paper's method or result from title alone;
+- distinguish what the paper actually reports from our interpretation;
+- do not copy a paper's model merely because it is recent or sophisticated.
 
-## Outputs
+If the environment cannot download a paper, record the traceable citation/link and analyze only the evidence actually accessible.
 
-Create or update:
+## Step 1 — Reconstruct the current modeling contract
+
+For the target subproblem identify:
+
+- task and evaluation target;
+- usable data and preparation status;
+- observation/group/time/spatial constraints;
+- leakage/information restrictions;
+- interpretability/extrapolation requirements;
+- upstream outputs consumed and downstream outputs required.
+
+If preparation status is `HOLD`, do not silently continue with a candidate that requires blocked data.
+
+## Step 2 — Research literature as evidence
+
+Search around the intersection of:
+
+```text
+current task
++ domain/problem context
++ data regime / measurement type
++ evaluation or validation constraint
+```
+
+For each core paper extract, when available:
+
+- research problem;
+- dataset/sample size and observation unit;
+- features/inputs and target;
+- preprocessing/feature engineering;
+- split/CV strategy and leakage controls;
+- model/algorithm;
+- baselines/comparison models;
+- metrics;
+- main result;
+- limitations/failure modes;
+- relevance to the current problem;
+- transferable idea;
+- non-transferable difference or risk.
+
+Update `paper/literature/literature_matrix.md` and `paper/literature/literature_notes.md`.
+
+Literature evidence may affect more than model choice. Route findings to the owning stage when they reveal:
+
+- data semantics/leakage risk → `data-audit`;
+- defensible preparation/feature handling questions → `data-preparation`;
+- candidate/baseline ideas → `model-selection`;
+- split/metrics/external validation requirements → validation plan;
+- interpretation/domain context → final analysis/paper discussion.
+
+## Step 3 — Build the benchmark landscape
+
+A benchmark landscape is the map of established methodological families and comparison standards relevant to this task; it is broader than a baseline.
+
+Organize evidence into roles such as:
+
+```text
+Benchmark landscape
+├─ simple meaningful baselines
+├─ established/standard benchmark methods
+├─ strong modern candidates
+└─ improved/problem-specific candidates
+```
+
+For each family record evidence, typical strengths, assumptions, data fit, validation practice, and known limitations. Save the synthesis to `paper/literature/benchmark_landscape.md`.
+
+## Step 4 — Generate the candidate pool
+
+Construct a small defensible pool, normally including:
+
+- at least one meaningful baseline;
+- one or more established strong/standard methods when appropriate;
+- one or more serious improved/problem-specific candidates when justified.
+
+For each serious candidate record:
+
+- role and literature/repository evidence;
+- fit reason and assumptions;
+- exact data/preprocessing requirements;
+- expected inputs/outputs;
+- upstream/downstream interfaces;
+- interpretability and computational cost;
+- leakage/information risks;
+- implementation/numerical risks;
+- validation method.
+
+Do not create novelty for novelty's sake.
+
+## Step 5 — Risk triage
+
+Classify each serious candidate as `LOW_RISK`, `HIGH_RISK`, or `BLOCKED` for pre-building feasibility.
+
+High-risk triggers include a genuinely uncertain critical mechanism, complex model-to-model interface, hard-feasibility constraint, numerical stability risk, unusual implementation, severe information-timing restriction, or a data/preparation dependency whose failure would invalidate the route.
+
+Mature standard algorithms are not sent to feasibility testing merely to prove that a library implementation runs.
+
+For each high-risk candidate, write a feasibility target and route only that candidate/mechanism to `feasibility-test`. `feasibility-test` returns viability evidence (`GO`, `GO_WITH_RISKS`, `HOLD`, `NO_GO`), not a winner.
+
+## Human Gate 1 — Candidate design
+
+Before expensive experiments, present:
+
+- benchmark landscape summary;
+- literature evidence quality/gaps;
+- candidate pool and roles;
+- rejected ideas and reasons;
+- risk triage;
+- candidates requiring feasibility test;
+- proposed screening protocol.
+
+Pause when human approval is required by project governance.
+
+## Step 6 — Lightweight screening experiment
+
+After required feasibility gates are resolved, compare all viable candidates under a common screening protocol.
+
+Screening asks: **which candidates deserve full modeling investment?** It is not final validation.
+
+Keep it lightweight but fair:
+
+- same prepared data and legal information set;
+- same approved split/CV logic;
+- same primary/secondary metrics;
+- comparable preprocessing boundaries;
+- modest/common compute budget;
+- fixed seeds where applicable;
+- record failures and runtime.
+
+Compare, as relevant:
+
+- predictive/objective performance;
+- variability/stability;
+- constraint satisfaction;
+- runtime/computational burden;
+- interpretability;
+- robustness signals;
+- downstream usefulness/interface quality.
+
+Do not over-tune during screening.
+
+## Step 7 — Produce the shortlist and experiment contract
+
+Normally retain a small shortlist rather than one model:
+
+```text
+baseline(s)
++ primary candidate
++ serious alternative(s)
+```
+
+The shortlist may contain multiple models so full model building and validation can establish whether the apparent advantage survives tuning, robustness and generalization checks.
+
+Create/update:
 
 - `project/baseline_solution.json`
 - `project/model_selection_audit.json`
 - `project/model_spec.json`
 
-`model_spec.json` is the approved experiment contract. It may contain multiple approved models so that model-building can compare them under the same inputs, split strategy, metrics, and validation plan. A primary candidate is not yet the final model.
+`model_spec.json` is the modeling-hand → programming-hand experiment contract. It must state approved models, data/features, forbidden predictors, split/CV, metrics, preprocessing boundaries, random seeds where needed, tuning budget/plan, validation requirements, and required outputs.
 
-The outputs should preserve enough information for downstream feasibility testing to recover:
+## Human Gate 2 — Full-build shortlist
 
-- candidate data requirements,
-- model inputs and outputs,
-- upstream/downstream interfaces,
-- information restrictions,
-- resolution requirements,
-- unresolved data-preparation restrictions,
-- major risks,
-- candidate feasibility targets,
-- experiment/validation plan.
+Before expensive full model building, show:
+
+- screening evidence;
+- feasibility evidence where applicable;
+- shortlist roles;
+- rejected candidates and reasons;
+- approved experiment contract.
 
 ## Forbidden behavior
 
-- no deep learning for novelty alone,
-- no candidate without a baseline,
-- no accuracy-only evaluation when other risks matter,
-- no causal interpretation from predictive performance alone,
-- no candidate that silently requires data unavailable at the relevant decision time,
-- no silent reuse of a high-impact preparation decision as if it were verified truth,
-- no handoff to model-building when a major feasibility risk has been identified but not tested.
+- no final winner from literature prestige alone;
+- no final winner from one screening run;
+- no deep learning/complex model for novelty alone;
+- no candidate without a meaningful comparison baseline;
+- no project papers stored in the reusable skills repository;
+- no accuracy-only decision when other constraints matter;
+- no silent change of split, information legality, or high-impact preparation assumptions;
+- no mandatory MVM for every mature candidate;
+- no full-build handoff for a high-risk candidate with unresolved `HOLD`/`NO_GO` feasibility status.
