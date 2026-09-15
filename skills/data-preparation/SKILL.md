@@ -22,9 +22,12 @@ problem-analysis
 → data-audit
 → data-preparation
 → model-selection
-→ feasibility-test
+   ├─ low-risk candidates → screening
+   └─ high-risk candidates → feasibility-test → screening
+→ shortlist
 → model-building
 → model-validation
+→ improvement loop
 ```
 
 `data-audit` diagnoses and recommends. `data-preparation` executes approved model-independent cleaning/preparation. Model-dependent preprocessing such as train-fitted scaling, encoding, target-aware feature selection, or learned imputation remains inside the later modeling pipeline.
@@ -308,7 +311,7 @@ The report must identify:
 - human approvals for high-impact changes,
 - downstream usage restrictions.
 
-`model-selection`, `feasibility-test`, and `model-building` should prefer the prepared data when the report marks it ready, while continuing to respect unresolved restrictions.
+`model-selection` and all later stages should prefer the prepared data when the report marks it ready, while continuing to respect unresolved restrictions. `feasibility-test` reads the prepared data only when model-selection has actually triggered a high-risk feasibility gate.
 
 ## Status
 
