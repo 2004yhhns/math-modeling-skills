@@ -1,118 +1,105 @@
 # Data Audit Checklist
 
-## Structure
+## Dataset inventory and observation structure
 
-- row meaning
-- column meaning
-- target variable
-- units
-- primary key / group key
-- time or spatial index
-- source file / table for each important field
-- whether each important quantity is observed, forecast, estimated, derived, or future-realized
+For every relevant dataset/file:
+- source file and dataset ID;
+- rows, columns, feature count;
+- observation unit: what exactly does one row represent?;
+- unique higher-level units such as subjects/devices/locations;
+- primary identifier and group keys;
+- repeated-measure/nested/hierarchical structure;
+- target/label candidates;
+- intended question usage.
+
+Never equate row count with independent sample count without checking the observation unit and grouping.
+
+## Variable semantics and roles
+
+Record column meaning, units, source, availability, resolution, and role. Useful roles include `input`, `target`, `state`, `parameter`, `constraint`, `identifier`, `grouping`, `metadata`, `covariate`, `derived`, `potential_leakage`, and `other`.
+
+An identifier may need to be retained for grouping while being forbidden as a predictor.
 
 ## Quality
 
-- missingness
-- duplicates
-- impossible values
-- inconsistent units
-- outliers
-- class imbalance
-- inconsistent timestamps
-- inconsistent coordinate conventions
-- duplicated or conflicting records across files
+Check missingness, duplicates, impossible/suspicious values, inconsistent units, outliers, imbalance, timestamp/coordinate inconsistencies, and duplicated/conflicting records across files. Characterize first; do not automatically repair.
+
+## Grouping and leakage
+
+Ask whether rows share information because they belong to the same subject, experiment, material, machine, location, time window, source dataset, or target-derived transformation.
+
+Check target leakage, identifier leakage, subject/group leakage, preprocessing leakage, dataset-source leakage, future/look-ahead leakage, and post-outcome variables. Recommend the split unit and strategy that preserves independence appropriate to the task.
 
 ## Temporal / sequential semantics
 
-When time or decisions matter, record explicitly:
-
-- observation timestamp,
-- sampling frequency,
-- availability/publication timestamp if different from observation time,
-- forecast issue time,
-- forecast target time / horizon,
-- decision time,
-- decision update interval,
-- future-realized fields that are unavailable at decision time,
-- timezone or clock convention when relevant.
-
-A field existing in a dataset does not imply that it was available to the decision maker earlier in time.
+When relevant record observation timestamp, sampling frequency, availability/publication timestamp, forecast issue time, target horizon, decision time, update interval, timezone/clock convention, and future-realized fields unavailable at decision time.
 
 ## Spatial semantics
 
-When spatial structure matters, record:
+When relevant record coordinate system, origin/axis/angle convention, spatial resolution, boundaries, and coordinate transformations.
 
-- coordinate system,
-- origin and axis convention,
-- angle convention if relevant,
-- spatial resolution,
-- region/boundary definition,
-- transformations between coordinate systems.
+## Cross-dataset compatibility
+
+For every dataset pair that may be combined, transferred across, or used for validation/comparison, check:
+- common features/fields;
+- semantic equivalence;
+- units/scales;
+- measurement/extraction protocol;
+- target definition;
+- cohort/population differences;
+- observation-unit compatibility;
+- whether direct concatenation is defensible;
+- safer alternatives such as common-feature comparison or external validation.
 
 ## Problem-to-data mapping
 
-For every important quantity named in `project/problem_brief.md`, determine whether it is:
+For every important conceptual quantity in `project/problem_brief.md`, determine whether it is directly present, derivable, ambiguous, or missing. Record concrete fields/derivations and semantic mismatches.
 
-- directly present in the data,
-- derivable from available fields,
-- ambiguous,
-- missing.
+## Question-to-data mapping
 
-Record the mapping and any transformation needed. Flag semantic mismatches even when column names look similar.
+For every Q1...Qn record:
+- conceptual requirements inherited from problem-analysis;
+- datasets/fields actually supporting them;
+- target/label availability;
+- observation/group structure;
+- upstream outputs consumed;
+- outputs actually supportable;
+- downstream consumers;
+- missing/ambiguous requirements;
+- support status: `SUPPORTED`, `PARTIALLY_SUPPORTED`, `BLOCKED`, `REQUIRES_ASSUMPTION`, or `REQUIRES_EXTERNAL_DATA`.
 
-## Leakage
+## Dependency reconciliation
 
-Ask whether two rows share information because they come from:
+Keep three layers separate:
 
-- the same subject,
-- the same experiment,
-- the same material,
-- the same machine,
-- the same time window,
-- the same transformed target.
+- `task_dependency_graph`: what should depend on what according to the statement;
+- `data_dependency_graph`: what actual data/fields/groups/constraints feed each subproblem;
+- `executable_dependency_graph`: which task interfaces remain implementable after data verification.
 
-Also ask whether a model or decision could accidentally use:
+Unsupported task edges must remain visible and be marked with the evidence causing the gap.
 
-- future actual values,
-- statistics fitted on future/test data,
-- post-outcome variables,
-- target-derived features,
-- forecasts published after the decision time.
+## Cleaning/preparation contract
 
-If yes, use an appropriate grouped/temporal/spatial split or remove the invalid information path.
-
-## Cleaning and preparation contract
-
-Record important cleaning/preparation decisions explicitly, including:
-
-- unit conversion,
-- resampling / aggregation,
-- interpolation,
-- missing-value handling,
-- coordinate transformation,
-- deduplication,
-- filtering rules.
-
-Do not silently bury a high-impact data repair in later model code.
+Audit records detected issues and preparation requirements/constraints. High-impact repair decisions such as imputation, interpolation, deduplication, filtering, clipping, aggregation, resampling, or unit conversion should be passed to `data-preparation` for justified execution and validation. Do not silently bury them in model code.
 
 ## Output contract
 
 At minimum record:
-
-- `task_data_regime`
-- `rows`
-- `features`
-- `variable_catalog`
-- `group_structure`
-- `time_structure`
-- `spatial_structure`
-- `information_timing`
-- `problem_data_mapping`
-- `leakage_risks`
-- `recommended_split`
-- `cleaning_or_preparation_decisions`
-- `unresolved_interface_issues`
-- `major_quality_issues`
-
-The output should be sufficient for `model-selection` to assess candidate data requirements and for `feasibility-test` to perform a focused MVM Data Readiness & Interface Check without repeating the entire audit.
+- `task_data_regime`;
+- `dataset_inventory`;
+- `variable_catalog`;
+- `group_structure`;
+- `time_structure`;
+- `spatial_structure`;
+- `information_timing`;
+- `problem_data_mapping`;
+- `question_data_mapping`;
+- `dataset_compatibility`;
+- `leakage_risks`;
+- `recommended_split`;
+- `task_dependency_graph`;
+- `data_dependency_graph`;
+- `executable_dependency_graph`;
+- `preparation_requirements`;
+- `unresolved_interface_issues`;
+- `major_quality_issues`.
