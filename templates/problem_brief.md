@@ -5,67 +5,89 @@
 - Competition:
 - Year:
 - Problem ID:
-- Source files:
+- Source files / statement attachments:
 
 ## 1. Problem objective
 
-Summarize the overall modeling goal in precise terms.
-
+- Overall modeling goal:
 - Overall final evaluation target:
 - Main required decision / prediction / explanation:
 
 ## 2. Subproblem decomposition
 
+Repeat this block for Q1...Qn.
+
 ### Q1
 
+- Goal:
+- Conceptual inputs required:
+- Conceptual target:
 - Required output:
-- Inputs:
 - Intermediate outputs:
 - Downstream consumer of each important output:
 - Constraints:
 - Evaluation target:
 - Mathematical task type:
 - Depends on:
+- Dependency reason / interface:
 - Later subproblems depending on Q1:
 - Candidate high-risk dependency/interface:
+- Data claims requiring audit verification:
 
 ### Q2
 
+- Goal:
+- Conceptual inputs required:
+- Conceptual target:
 - Required output:
-- Inputs:
 - Intermediate outputs:
 - Downstream consumer of each important output:
 - Constraints:
 - Evaluation target:
 - Mathematical task type:
 - Depends on:
+- Dependency reason / interface:
 - Later subproblems depending on Q2:
 - Candidate high-risk dependency/interface:
+- Data claims requiring audit verification:
 
 ## 3. Task dependency graph
 
-Record both subproblem dependencies and important quantity/model interfaces.
+This graph represents dependencies implied by the statement/mathematical task, not verified data availability. Do not infer edges from question numbering alone.
 
 ```text
 Example only:
-raw data → upstream model → intermediate output → downstream model/decision → final target
+Q1 --result: intermediate quantity--> Q2 --decision input--> Q4
+Q1 --validation target-------------> Q3
 ```
+
+### Dependency edge registry
+
+| From | To | Type | Conceptual interface carried | Why the dependency exists | Data verification needed? |
+|---|---|---|---|---|---|
 
 - Critical downstream outputs:
 - Interfaces requiring later verification:
 
-## 4. Data and attachments
+## 4. Data-audit verification requests
 
-- Files:
-- Key fields:
-- Units:
-- Known quality issues:
+Record what must be checked against actual files; do not assume availability here.
+
+| Subproblem | Required quantity/data concept | What must be verified | Why it matters |
+|---|---|---|---|
+
+Typical checks: target/label availability, concrete file/field mapping, observation unit, grouping/repeated measures, units, cross-dataset compatibility, information timing, leakage-sensitive identifiers.
+
+## 5. Data and attachments known from the statement
+
+- Files mentioned:
+- Quantities/fields described by the statement:
+- Units described by the statement:
 - Required temporal resolution:
 - Required spatial resolution:
+- Unverified data claims:
 
-## 5. Information availability and timing
-
-For sequential, forecasting, scheduling, control, or time-dependent problems, state what is known when a decision is made.
+## 6. Information availability and timing
 
 | Quantity / information | Available when? | Observed / forecast / estimated / future-realized | Allowed for which decision? | Notes |
 |---|---|---|---|---|
@@ -74,23 +96,18 @@ For sequential, forecasting, scheduling, control, or time-dependent problems, st
 - Forecast issue times / horizons if relevant:
 - Decision update frequency if relevant:
 
-## 6. Hard constraints
+## 7. Hard constraints
 
-List requirements that must not be violated.
-
-## 7. Ambiguities
+## 8. Ambiguities
 
 | ID | Issue | Impact | Status / resolution |
 |---|---|---|---|
 
-## 8. Deliverables
+## 9. Deliverables
 
-List required numerical answers, rankings, figures, tables, plans, or forecasts.
-
-## 9. Current task taxonomy
+## 10. Current task taxonomy
 
 - Primary task types:
 - Secondary task types:
-- Data regime:
 - Main uncertainty sources:
 - Candidate critical dependencies for later feasibility testing:
