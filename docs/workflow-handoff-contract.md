@@ -1,237 +1,158 @@
 # Workflow Handoff Contract
 
-This document defines the minimum information that must survive between core modeling stages so that downstream skills do not have to reconstruct important assumptions, data semantics, interfaces, or risks from scratch.
+This document defines what must survive between modeling stages. Downstream skills must not reconstruct important assumptions, data semantics, interfaces, evidence, or risks from scratch.
 
-## Principle
+## Human-readable workflow
 
-Each stage has two responsibilities:
+```text
+PROBLEM ANALYSIS
+      ↓
+DATA AUDIT → DATA PREPARATION
+      ↓
+MODEL RESEARCH
+  ├─ reusable knowledge
+  └─ live-project literature: paper/literature/
+      ↓
+BENCHMARK LANDSCAPE
+      ↓
+CANDIDATE POOL
+      ↓
+RISK TRIAGE
+ ┌────┴──────────────┐
+ ↓                   ↓
+LOW RISK          HIGH RISK
+ ↓                   ↓
+ │            FEASIBILITY TEST
+ │             GO / NO-GO
+ └──────────┬────────┘
+            ↓
+      SCREENING EXPERIMENT
+            ↓
+          SHORTLIST
+   baseline + primary + alternatives
+            ↓
+       MODEL BUILDING
+            ↓
+       MODEL VALIDATION
+            ↓
+      FINAL RECOMMENDATION
+            ↓
+       IMPROVEMENT LOOP ↺
+```
 
-1. solve its own stage-specific task;
-2. preserve the information that the next stage needs.
-
-If downstream work discovers that a required upstream fact was never established, return to the responsible upstream stage rather than silently inventing or repairing it downstream.
-
----
+The user-facing workflow can group `data-audit + data-preparation` as “data review and cleaning/preparation”. Internally they remain separate so diagnosis is not confused with irreversible cleaning decisions.
 
 ## 1. problem-analysis → data-audit
 
-### Producer: `problem-analysis`
+`problem-analysis` preserves subproblem definitions, conceptual inputs/targets/outputs, hard constraints, evaluation targets, task dependencies, information rules, assumptions/ambiguities, and data-verification requests.
 
-Must preserve:
-
-- subproblem definitions,
-- required outputs,
-- known inputs,
-- hard constraints,
-- evaluation targets,
-- task dependencies,
-- important intermediate outputs,
-- downstream consumers of those outputs,
-- units stated by the problem,
-- required temporal/spatial resolution,
-- information-availability rules when decisions are sequential,
-- ambiguities and assumptions,
-- candidate high-risk interfaces.
-
-### Consumer: `data-audit`
-
-Uses those fields to determine whether required quantities actually exist, whether units/meanings/resolution match, whether future information is unavailable at decision time, and whether data can be mapped to problem quantities without ambiguity.
-
-### Failure condition
-
-If problem-analysis does not identify what a quantity means or when it is allowed to be known, data-audit must flag the ambiguity rather than guess.
-
----
+`data-audit` verifies what actual data can support and must not silently rewrite the task logic.
 
 ## 2. data-audit → data-preparation
 
-### Producer: `data-audit`
+`data-audit` preserves dataset inventory, observation unit, grouping/independent unit, variable semantics/units, missingness/duplicates/ranges, time/spatial structure, information timing, leakage risks, dataset compatibility, question-data mapping, recommended split, unresolved issues, and preparation requirements.
 
-Must preserve:
-
-- variable catalog and semantic meaning,
-- units,
-- missingness and invalid ranges,
-- group/time/spatial structure,
-- sampling frequency / spatial resolution,
-- forecast issue time and horizon when relevant,
-- decision interval when relevant,
-- information-availability metadata,
-- leakage risks,
-- recommended split strategy,
-- proposed cleaning/preparation decisions,
-- problem-to-data mapping,
-- unresolved interface issues,
-- blocking vs non-blocking quality issues.
-
-### Consumer: `data-preparation`
-
-Uses the audit as a diagnosis, but independently decides whether each proposed transformation is semantically defensible for the concrete problem before executing it.
-
-It must distinguish, especially for missingness:
-
-- structural / not applicable,
-- expected absence,
-- measurement failure,
-- censored/truncated,
-- future unavailable,
-- unresolved semantic status.
-
-It may preserve data unchanged when modification would destroy or invent information.
-
-### Failure condition
-
-A data-audit recommendation is not automatic permission to impute/delete/smooth/resample. If the meaning is ambiguous or the transformation is high impact, data-preparation must preserve/flag or request human review.
-
----
+`data-preparation` decides and executes only semantically defensible transformations. Missing is not automatically error or zero; mean/median filling, deletion, smoothing/resampling and future-information reconstruction are never default actions. High-impact choices require explicit justification/Human Gate under project governance.
 
 ## 3. data-preparation → model-selection
 
-### Producer: `data-preparation`
+Preserve prepared-data provenance/status (`READY`, `READY_WITH_WARNINGS`, `HOLD`), transformations and rationale, rejected/deferred treatments, before/after diagnostics, unresolved issues and downstream restrictions.
 
-Must preserve:
+Model-selection must carry those restrictions into literature interpretation, candidate design, screening and validation.
 
-- raw input provenance,
-- prepared output paths,
-- preparation status (`READY`, `READY_WITH_WARNINGS`, `HOLD`),
-- issue-by-issue semantic interpretation,
-- transformations applied and their justification,
-- transformations rejected/deferred,
-- missingness decisions,
-- before/after diagnostics,
-- affected rows/values,
-- high-impact human approvals,
-- unresolved issues,
-- downstream usage restrictions.
+## 4. Literature evidence inside model-selection
 
-Prepared data must be written separately from raw data.
+Project-specific literature is stored only under:
 
-### Consumer: `model-selection`
+```text
+paper/literature/
+├── downloaded/
+├── literature_matrix.md
+├── benchmark_landscape.md
+└── literature_notes.md
+```
 
-Uses prepared data only when preparation status permits it, and carries unresolved restrictions forward. A preparation decision that may materially affect conclusions becomes a modeling/validation risk rather than invisible preprocessing.
+Literature findings are cross-stage evidence:
 
-### Failure condition
+```text
+literature
+├─ data semantics/leakage → data-audit
+├─ preparation questions  → data-preparation
+├─ baselines/candidates   → model-selection
+├─ split/metrics/validation standards → model_spec/validation
+└─ interpretation/domain context → final paper/discussion
+```
 
-`HOLD` must not silently flow into model selection for candidates that depend on blocked data. High-impact imputation/deletion/resampling must not be treated as verified truth.
+Do not put current-project papers into reusable `knowledge/`.
 
----
+## 5. model-selection → risk triage / feasibility
 
-## 4. model-selection → feasibility-test
+Model-selection builds an evidence-backed benchmark landscape and candidate pool. Each serious candidate receives a risk triage.
 
-### Producer: `model-selection`
+`LOW_RISK` mature candidates can proceed directly to screening when their data/interface requirements are satisfied.
 
-Must preserve for serious candidates:
+`HIGH_RISK` candidates are routed to `feasibility-test` only when a critical mechanism/interface may invalidate the route. Feasibility returns viability evidence (`GO`, `GO_WITH_RISKS`, `HOLD`, `NO_GO`, or `NOT_REQUIRED`), not the best model.
 
-- baseline(s),
-- candidate model family,
-- expected inputs and outputs,
-- exact/qualitative data requirements,
-- preprocessing requirements,
-- upstream dependencies,
-- downstream consumers,
-- model-to-model interfaces,
-- information constraints,
-- temporal/spatial resolution requirements,
-- major implementation/numerical risks,
-- sensitivity to important preparation decisions,
-- validation method,
-- candidate feasibility targets,
-- evidence required before full commitment.
+## 6. Viable candidates → screening
 
-### Consumer: `feasibility-test`
+Screening compares viable candidates under a common lightweight protocol: same legal data, split/CV, metrics, comparable preprocessing boundaries and modest compute budget.
 
-Uses those fields together with the problem brief, data audit, and prepared-data report to derive the dependency graph, final target, critical path, critical failure point, CFQ, required data, MVM readiness/interface check, proposed MVM, and Human Gate card.
+Screening produces a **shortlist**, normally:
 
-### Important boundary
+```text
+baseline(s)
++ primary candidate
++ serious alternative(s)
+```
 
-`model-selection` may suggest candidate feasibility targets, but it does **not** own the final CFQ. `feasibility-test` must independently derive the CFQ from the critical path and current evidence.
+It should not force one final winner before full modeling and validation.
 
----
+## 7. shortlist → model-building
 
-## 5. feasibility-test → model-building
+`project/model_spec.json` is the modeling-hand → programming-hand experiment contract.
 
-### Producer: `feasibility-test`
+It preserves approved models/roles, data/features, forbidden information, split/CV, metrics, preprocessing boundaries, tuning budget, reproducibility requirements, validation/robustness/interpretability plans and required outputs.
 
-Must preserve:
+Model-building owns most full algorithm implementation, tuning and training. It writes code/results only into the live project and logs meaningful runs/failures.
 
-- final target,
-- dependency chain,
-- critical failure point,
-- CFQ,
-- primary/secondary families,
-- required data,
-- data readiness and interface findings,
-- approved MVM,
-- success/failure evidence,
-- universal checks,
-- family-specific checks,
-- counterfactual review,
-- blockers and repair cost,
-- phase-gate status,
-- next action.
+## 8. model-building → model-validation
 
-### Consumer: `model-building`
+Model-building preserves code/config version, experiment configuration, random seed, split, model-dependent preprocessing, parameters, outputs/diagnostics, runtime, failed experiments and contract deviations.
 
-May proceed only if the feasibility status and Human Gate permit continuation.
+Validation compares the full-built shortlist against baselines and checks leakage, generalization, error/residual structure, robustness, sensitivity, interpretation and downstream usefulness. It may recommend the final model only after this evidence exists.
 
-The model-building stage should preserve the approved assumptions, information restrictions, interfaces, hard constraints, and data-preparation restrictions unless a new Human Gate is triggered.
+## 9. validation → improvement loop
 
-### Failure condition
+Validation diagnoses before changing the system:
 
-`HOLD` or `NO_GO` must not silently flow into full model implementation.
+```text
+raw-data diagnosis problem       → data-audit
+cleaning/preparation problem     → data-preparation
+wrong model family/candidates    → model-selection
+unproven high-risk mechanism     → feasibility-test when actually needed
+implementation/tuning problem    → model-building
+validation-design problem        → model-validation with transparent revision
+interpretation-only problem      → limit/rewrite claim
+```
 
----
-
-## 6. model-building → model-validation
-
-### Producer: `model-building`
-
-Must preserve:
-
-- code/version used,
-- experiment configuration,
-- random seed,
-- data split,
-- model-dependent preprocessing,
-- model parameters,
-- outputs and diagnostics,
-- runtime,
-- failed experiments,
-- deviations from the approved model specification.
-
-### Consumer: `model-validation`
-
-Uses those records to verify baseline improvement, correct split/leakage control, residual/error structure, group/time/spatial generalization, stability/robustness, and whether conclusions are supported by evidence.
-
----
+Each loop records the observed weakness, evidence, owner stage, proposed change, new experiment/validation id and whether the change helped.
 
 ## Cross-stage invariant checks
 
 | Concept | First owner | Later consumers |
 |---|---|---|
-| Final evaluation target | problem-analysis | model-selection, feasibility-test, validation |
-| Hard constraints | problem-analysis | all later stages |
-| Variable meaning / units | data-audit | data-preparation and all later stages |
-| Information availability | problem-analysis + data-audit | data-preparation and all later stages |
-| Temporal/spatial resolution | problem-analysis + data-audit | data-preparation and all later stages |
-| Cleaning/preparation rationale | data-preparation | model-selection, feasibility-test, model-building, validation |
-| Missingness semantics | data-preparation | model-selection, feasibility-test, model-building, validation |
-| Model interfaces | model-selection | feasibility-test, model-building, validation |
-| Feasibility risks | model-selection | feasibility-test |
-| CFQ / critical failure point | feasibility-test | model-building, validation |
-| Approved model specification | model-selection + feasibility-test | model-building |
-| Experimental evidence | model-building | model-validation |
+| Task/evaluation target | problem-analysis | all later stages |
+| Observation/group/data semantics | data-audit | all later stages |
+| Cleaning/preparation rationale | data-preparation | all later stages |
+| Literature evidence | model-selection/live paper | selection, validation, interpretation |
+| Benchmark landscape | model-selection | candidate design, paper |
+| Candidate risk triage | model-selection | feasibility/screening |
+| CFQ for high-risk route | feasibility-test | screening/building/validation |
+| Screening evidence | model-selection | model-building/validation |
+| Experiment contract | model-selection | programming/model-building |
+| Full experimental evidence | model-building | model-validation |
+| Final recommendation/improvement diagnosis | model-validation | final paper or routed owner |
 
-## Return-path rule
+## Core principle
 
-```text
-problem meaning / ambiguity                 → problem-analysis
-missing / invalid / misaligned data         → data-audit
-cleaning / imputation / preparation choice  → data-preparation
-wrong candidate / model family              → model-selection
-unproven critical mechanism                 → feasibility-test
-implementation defect                       → model-building
-unsupported conclusion                      → model-validation or earlier owner
-```
-
-Do not repair an upstream semantic error only inside downstream code.
+Do not repair an upstream semantic error only inside downstream code. Literature tells us what is worth trying; feasibility tells us whether a risky route is executable; screening tells us what deserves full investment; model-building produces full experimental evidence; validation determines what is defensible and where to improve.
