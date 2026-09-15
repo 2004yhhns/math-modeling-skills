@@ -2,50 +2,22 @@
   "problem_id": "",
   "task_type": "",
   "target": "",
+  "data_sources": [],
   "features": [],
+  "forbidden_predictors_or_information": [],
   "decision_variables": [],
   "constraints": [],
   "upstream_dependencies": [],
   "downstream_consumers": [],
-  "model_interfaces": [
-    {
-      "from": "",
-      "to": "",
-      "quantity": "",
-      "unit": "",
-      "resolution": "",
-      "availability_rule": "",
-      "notes": ""
-    }
-  ],
-  "data_requirements": [
-    {
-      "quantity": "",
-      "source": "",
-      "required_unit": "",
-      "required_resolution": "",
-      "availability_requirement": "",
-      "required_for": ""
-    }
-  ],
+  "model_interfaces": [],
   "information_constraints": [],
-  "resolution_requirements": {
-    "temporal": "",
-    "spatial": "",
-    "notes": ""
-  },
-  "approved_models": [],
-  "primary_candidate": "",
-  "baseline_models": [],
-  "validation_model": "",
-  "candidate_feasibility_targets": [
+  "approved_models": [
     {
-      "candidate": "",
-      "mechanism_or_interface": "",
-      "why_failure_matters": "",
-      "evidence_needed": [],
-      "required_data": [],
-      "constraints_to_preserve": []
+      "name": "",
+      "role": "baseline | primary | alternative",
+      "screening_evidence": "",
+      "feasibility_status": "NOT_REQUIRED | GO | GO_WITH_RISKS",
+      "implementation_notes": ""
     }
   ],
   "split_strategy": {
@@ -54,10 +26,36 @@
     "time_key": "",
     "reason": ""
   },
-  "metrics": [],
-  "preprocessing": [],
-  "random_seed": null,
+  "cross_validation": {
+    "method": "",
+    "folds": null,
+    "grouping_rule": "",
+    "notes": ""
+  },
+  "metrics": {
+    "primary": [],
+    "secondary": []
+  },
+  "preprocessing": {
+    "model_independent_prepared_data": "",
+    "fit_inside_training_scope": [],
+    "forbidden_global_operations": [],
+    "notes": ""
+  },
+  "tuning_plan": {
+    "method": "",
+    "budget": "",
+    "selection_metric": "",
+    "notes": ""
+  },
+  "random_seed_policy": "",
   "validation_plan": [],
   "interpretability_plan": [],
-  "robustness_plan": []
+  "robustness_plan": [],
+  "required_outputs": [
+    "metrics",
+    "predictions",
+    "runtime_and_failures"
+  ],
+  "human_gate_status": "PENDING"
 }
