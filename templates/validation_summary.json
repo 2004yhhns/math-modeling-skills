@@ -1,14 +1,34 @@
 {
   "problem_id": "",
-  "selected_model": "",
+  "models_validated": [],
+  "model_comparison": [],
   "baseline_comparison": [],
   "split_verified": false,
   "leakage_checks": [],
   "residual_or_error_checks": [],
-  "group_or_regime_checks": [],
+  "group_time_dataset_or_regime_checks": [],
   "robustness_checks": [],
+  "sensitivity_checks": [],
+  "interpretability_checks": [],
   "interpretation_limits": [],
-  "overall_status": "NOT_VALIDATED",
+  "final_recommendation": {
+    "primary_model": "",
+    "retained_baselines_or_alternatives": [],
+    "reason": "",
+    "evidence": []
+  },
+  "overall_status": "NOT_VALIDATED | VALIDATED | VALIDATED_WITH_LIMITATIONS | IMPROVEMENT_REQUIRED | BLOCKED",
   "blocking_issues": [],
+  "improvement_diagnosis": [
+    {
+      "observed_weakness": "",
+      "evidence": [],
+      "root_cause_owner": "DATA_DIAGNOSIS | DATA_PREPARATION | MODEL_FAMILY | IMPLEMENTATION_OR_TUNING | VALIDATION_DESIGN | INTERPRETATION_ONLY",
+      "proposed_change": "",
+      "human_gate_required": false,
+      "status": "PROPOSED"
+    }
+  ],
+  "improvement_history": [],
   "next_action": ""
 }
